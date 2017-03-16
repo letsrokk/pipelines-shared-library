@@ -12,7 +12,7 @@ class Reports implements Serializable{
     }
 
     def storeCucumberReport(path){
-        steps.echo "Storing Cucumber JVM org.fxclub.qa.jenkins.Reports: ${path}"
+        steps.echo "Publishing Cucumber JVM reports: ${path}"
         steps.junit allowEmptyResults: true, testResults: "${path}"
     }
 
@@ -21,7 +21,7 @@ class Reports implements Serializable{
     }
 
     def buildAllureReport(allureCommandlineToolName, resultsPath, reportsPath){
-        steps.echo "Building Allure Report:results: ${path}"
+        steps.echo "Building Allure Report: ${path}"
         steps.echo "results: ${resultsPath}, reports: ${reportsPath}"
 
         def allureHome = steps.tool "${allureCommandlineToolName}"
@@ -35,6 +35,7 @@ class Reports implements Serializable{
     }
 
     def storeAllureReport(reportsPath){
+        steps.echo "Publishing Allure Reports: ${reportsPath}"
         steps.publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${reportsPath}", reportFiles: 'index.html', reportName: 'Allure Report'])
     }
 }
