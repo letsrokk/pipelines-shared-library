@@ -21,7 +21,7 @@ class Reports implements Serializable{
     }
 
     def buildAllureReport(allureCommandlineToolName, resultsPath, reportsPath){
-        steps.echo "Building Allure Report: ${path}"
+        steps.echo "Building Allure Report: using ${allureCommandlineToolName}"
         steps.echo "results: ${resultsPath}, reports: ${reportsPath}"
 
         def allureHome = steps.tool "${allureCommandlineToolName}"
