@@ -13,7 +13,7 @@ class Maven implements Serializable{
 
     Maven(maven, profile, steps){
         this.steps = steps
-        this.mvnHome = tool "${maven}"
+        this.mvnHome = steps.tool "${maven}"
         this.mvn = "${mvnHome}/bin/mvn"
         if(profile != null)
             mvnProfile = "-P ${profile}"
