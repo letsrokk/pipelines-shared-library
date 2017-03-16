@@ -19,8 +19,8 @@ class Maven implements Serializable{
     }
 
     def goals(command) {
-        this.mvnHome = steps.tool "${mavenToolName}"
-        this.mvn = "${mvnHome}/bin/mvn"
+        def mvnHome = steps.tool "${mavenToolName}"
+        def mvn = "${mvnHome}/bin/mvn"
 
         def mvnCommand = "${mvn} ${mvnProfile} ${command}"
 
