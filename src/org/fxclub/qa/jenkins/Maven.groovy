@@ -3,24 +3,27 @@ package org.fxclub.qa.jenkins
 class Maven implements Serializable{
 
     def steps
-    def mvnHome
-    def mvn
+    def mavenToolName
     def mvnProfile = ''
 
     Maven(steps){
         this('Maven 3.x', 'jenkins', steps)
     }
 
-    Maven(maven, profile, steps){
+    Maven(mavenToolName, mvnProfile, steps){
         this.steps = steps
-        this.mvnHome = steps.tool "${maven}"
-        this.mvn = "${mvnHome}/bin/mvn"
-        if(profile != null)
-            mvnProfile = "-P ${profile}"
+        this.mavenToolName = mavenToolName
+
+        if(mvnProfile != null)
+            this.mvnProfile = "-P ${mvnProfile}"
     }
 
     def goals(command) {
+        this.mvnHome = steps.tool "${maven}"
+        this.mvn = "${mvnHome}/bin/mvn"
+
         def mvnGoals = "${mvn} ${mvnProfile} ${command}"
+
         steps.echo "Executing Maven goals: ${mvnGoals}"
         sh "${mvnGoals}"
     }
