@@ -1,5 +1,22 @@
 package org.fxclub.qa.jenkins
 
+import com.fasterxml.jackson.databind.ObjectMapper
+
+List<JsonFeature> parseCucumberJsonReport(reportName){
+    def mapper = new ObjectMapper()
+    def json = mapper.readValue(
+            new File("/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel/${reportName}").text,
+            JsonFeature[]
+    )
+    return json
+}
+
+def writeReport(List<JsonFeature> report){
+    ObjectMapper mapper = new ObjectMapper();
+    String jsonInString = mapper.writeValueAsString(report);
+    mapper.writeValue(new File("merged.json"), report)
+}
+
 def mergeReport(Collection<JsonFeature> mergedReport, Collection<JsonFeature>... toMergeCollections){
     for(Collection<JsonFeature> toMergeFeatures : toMergeCollections){
         if(mergedReport.size() == 0){
@@ -23,11 +40,10 @@ def mergeReport(Collection<JsonFeature> mergedReport, Collection<JsonFeature>...
     return mergedReport
 }
 
-def reports = new Reports()
-Collection<JsonFeature> json1 = reports.parseCucumberJsonReport('13.json')
-Collection<JsonFeature> json2 = reports.parseCucumberJsonReport('15.json')
+List<JsonFeature> json1 = parseCucumberJsonReport('13.json')
+List<JsonFeature> json2 = parseCucumberJsonReport('15.json')
 
 List<JsonFeature> mergedReport = new ArrayList<>()
 mergedReport = mergeReport(mergedReport, json1, json2)
 println(mergedReport)
-reports.writeReport(mergedReport)
+writeReport(mergedReport)

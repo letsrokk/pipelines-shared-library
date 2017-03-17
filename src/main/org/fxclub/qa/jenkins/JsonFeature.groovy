@@ -3,7 +3,7 @@ package org.fxclub.qa.jenkins
 class JsonFeature {
 
     def line
-    Collection<JsonScenario> elements
+    List<JsonScenario> elements
     def name
     def description
     def id
