@@ -1,9 +1,6 @@
-package org.fxclub.qa.jenkins
+package org.fxclub.qa.jenkins.internal
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class JsonStep {
+class JsonStep extends JsonBase {
 
     JsonStepResult result
     def line
@@ -12,9 +9,8 @@ class JsonStep {
     int[] matchedColumns
     JsonStepRow[] rows
     def keyword
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    class JsonStepResult{
+    
+    class JsonStepResult extends JsonBase{
         def duration
         def status
         def error_message

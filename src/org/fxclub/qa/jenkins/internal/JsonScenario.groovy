@@ -1,9 +1,6 @@
-package org.fxclub.qa.jenkins
+package org.fxclub.qa.jenkins.internal
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class JsonScenario {
+class JsonScenario extends JsonBase {
 
     def line
     JsonComment[] comments
