@@ -1,11 +1,14 @@
 package org.fxclub.qa.jenkins
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
+import static groovy.io.FileType.FILES
 
-List<JsonFeature> parseCucumberJsonReport(reportName){
+List<JsonFeature> parseCucumberJsonReport(path){
     def mapper = new ObjectMapper()
+//    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
     def json = mapper.readValue(
-            new File("/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel/${reportName}").text,
+            new File("${path}").text,
             JsonFeature[]
     )
     return json
@@ -40,10 +43,14 @@ def mergeReport(Collection<JsonFeature> mergedReport, Collection<JsonFeature>...
     return mergedReport
 }
 
-List<JsonFeature> json1 = parseCucumberJsonReport('13.json')
-List<JsonFeature> json2 = parseCucumberJsonReport('15.json')
-
 List<JsonFeature> mergedReport = new ArrayList<>()
-mergedReport = mergeReport(mergedReport, json1, json2)
-println(mergedReport)
+
+def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
+reportsDir.eachFileRecurse(FILES) {
+    if(it.name.endsWith('.json')) {
+        List<JsonFeature> features = parseCucumberJsonReport(it.getAbsolutePath())
+        mergedReport = mergeReport(mergedReport, features)
+    }
+}
+
 writeReport(mergedReport)

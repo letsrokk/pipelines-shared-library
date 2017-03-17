@@ -3,13 +3,12 @@ package org.fxclub.qa.jenkins
 import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class JsonStepMatchArgument{
+class JsonTag {
 
-    def val
-    def offset
+    def line
+    def name
 
-    JsonStepMatchArgument(){
+    JsonTag(){
 
     }
-
 }
