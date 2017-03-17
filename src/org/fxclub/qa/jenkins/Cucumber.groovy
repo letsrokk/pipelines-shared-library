@@ -9,7 +9,6 @@ import org.fxclub.qa.jenkins.internal.JsonFeature
 
 class Cucumber implements Serializable {
 
-    @NonCSP
     List<JsonFeature> parseCucumberJsonReport(path){
         def mapper = new ObjectMapper()
         def json = mapper.readValue(
@@ -19,7 +18,6 @@ class Cucumber implements Serializable {
         return json
     }
 
-    @NonCSP
     def writeReport(List<JsonFeature> report, path = 'target/cucumber-report'){
         ObjectMapper mapper = new ObjectMapper()
         String jsonInString = mapper.writeValueAsString(report)
@@ -29,7 +27,6 @@ class Cucumber implements Serializable {
         mapper.writeValue(jsonReport, report)
     }
 
-    @NonCSP
     def mergeReport(Collection<JsonFeature> mergedReport, Collection<JsonFeature>... toMergeCollections){
         for(Collection<JsonFeature> toMergeFeatures : toMergeCollections){
             if(mergedReport.size() == 0){
