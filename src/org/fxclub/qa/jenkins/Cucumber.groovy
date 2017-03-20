@@ -31,8 +31,8 @@ class Cucumber implements Serializable {
     }
 
     @NonCPS
-    def mergeReport(Collection<JsonFeature> mergedReport, Collection<JsonFeature>... toMergeCollections){
-        for(Collection<JsonFeature> toMergeFeatures : toMergeCollections){
+    def mergeReport(List<JsonFeature> mergedReport, List<JsonFeature>... toMergeCollections){
+        for(List<JsonFeature> toMergeFeatures : toMergeCollections){
             if(mergedReport.size() == 0){
                 mergedReport.addAll(toMergeFeatures)
                 continue
@@ -56,7 +56,7 @@ class Cucumber implements Serializable {
 
     @NonCPS
     def getReport(){
-        def mergedReport
+        def mergedReport = new ArrayList()
         def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
         reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
             if(it.name.endsWith('.json')) {
