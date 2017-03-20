@@ -73,12 +73,13 @@ class Cucumber implements Serializable {
 //        File[] files = reportsDir.listFiles()
 //        for(File file : files){
         def files = steps.findFiles glob: "${path}/*.json"
-        for(def file : files){
+        List<JsonFeature> features = parseCucumberJsonReport(files[0])
+//        for(def file : files){
 //            if(file.getName().endsWith("json")){
-                List<JsonFeature> features = parseCucumberJsonReport(file)
+//                List<JsonFeature> features = parseCucumberJsonReport(file)
                 mergedReport = mergeReport(mergedReport, features)
 //            }
-        }
+//        }
         return mergedReport
     }
 
