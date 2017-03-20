@@ -79,4 +79,13 @@ class Cucumber implements Serializable {
         return mergedReport
     }
 
+    String mergeCucumberJSONReports(){
+        mergeCucumberJSONReports('target/cucumber-parallel')
+    }
+
+    String mergeCucumberJSONReports(path){
+        List<JsonFeature> mergedJSON = cucumber.getReport(path)
+        return writeReport(mergedJSON)
+    }
+
 }
