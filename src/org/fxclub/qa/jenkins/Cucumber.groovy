@@ -74,13 +74,25 @@ class Cucumber implements Serializable {
         def mergedReport = new ArrayList<JsonFeature>()
         steps.echo "${mergedReport}"
         def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
-        reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
-            if(it.name.endsWith('.json')) {
-                steps.echo "Parsing JSON file: ${it.getAbsolutePath()}"
-                List<JsonFeature> features = parseCucumberJsonReport(it.getAbsolutePath())
-                mergedReport = mergeReport(mergedReport, features)
+        File[] files = reportsDir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".json");
             }
+        })
+
+        for(File file : files){
+            steps.echo "Parsing JSON file: ${file.getAbsolutePath()}"
+            List<JsonFeature> features = parseCucumberJsonReport(file.getAbsolutePath())
+            mergedReport = mergeReport(mergedReport, features)
         }
+
+//        reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
+//            if(it.name.endsWith('.json')) {
+//                steps.echo "Parsing JSON file: ${it.getAbsolutePath()}"
+//                List<JsonFeature> features = parseCucumberJsonReport(it.getAbsolutePath())
+//                mergedReport = mergeReport(mergedReport, features)
+//            }
+//        }
         steps.echo "DONE! ${mergedReport}"
         return mergedReport
     }
