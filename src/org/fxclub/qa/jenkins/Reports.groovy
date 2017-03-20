@@ -40,6 +40,7 @@ class Reports implements Serializable{
     }
 
     def storeAllureReport(){
+        buildAllureReport()
         storeAllureReport('target/allure-report')
     }
 
