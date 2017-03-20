@@ -10,6 +10,12 @@ import com.cloudbees.groovy.cps.NonCPS
 
 class Cucumber implements Serializable {
 
+    def steps
+
+    Cucumber(steps){
+        this.steps = steps
+    }
+
     @NonCPS
     List<JsonFeature> parseCucumberJsonReport(path){
         def mapper = new ObjectMapper()
@@ -24,10 +30,11 @@ class Cucumber implements Serializable {
     def writeReport(List<JsonFeature> report, path = 'target/cucumber-report'){
         ObjectMapper mapper = new ObjectMapper()
         def jsonInString = mapper.writeValueAsString(report)
-        File jsonReport = new File("${path}/cucumber.json")
-        jsonReport.getParentFile().mkdirs()
-        jsonReport.createNewFile()
-        mapper.writeValue(jsonReport, report)
+//        File jsonReport = new File("${path}/cucumber.json")
+//        jsonReport.getParentFile().mkdirs()
+//        jsonReport.createNewFile()
+//        mapper.writeValue(jsonReport, report)
+        steps.writeFile file: "${path}/cucumber.json", text: mapper.writeValueAsString(report)
     }
 
     @NonCPS
