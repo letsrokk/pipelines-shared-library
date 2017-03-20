@@ -68,10 +68,9 @@ class Cucumber implements Serializable {
         List<JsonFeature> mergedReport = new ArrayList<JsonFeature>()
         File reportsDir = new File("${path}")
         File[] files = reportsDir.listFiles()
-
         for(File file : files){
             if(file.getName().endsWith("json")){
-                //steps.echo "Parsing JSON file: ${file.getAbsolutePath()}"
+                steps.echo "Parsing JSON file: ${file.getAbsolutePath()}"
                 List<JsonFeature> features = parseCucumberJsonReport(file.getAbsolutePath())
                 mergedReport = mergeReport(mergedReport, features)
             }
