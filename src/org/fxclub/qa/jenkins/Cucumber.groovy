@@ -15,7 +15,8 @@ class Cucumber implements Serializable {
     }
 
     List<JsonFeature> parseCucumberJsonReport(path){
-        def jsonString = steps.readFile file: "${path}"
+        steps.echo "Parsing JSON file: ${path}"
+        def jsonString = steps.readFile "${path}"
         ObjectMapper mapper = new ObjectMapper()
         List<JsonFeature> json = mapper.readValue(
                 jsonString,
@@ -68,13 +69,11 @@ class Cucumber implements Serializable {
         List<JsonFeature> mergedReport = new ArrayList<JsonFeature>()
         File reportsDir = new File("${path}")
         steps.echo "Merge Cucumber JSON reports: ${path}"
-        steps.echo "Merge Cucumber JSON reports: ${reportsDir.getAbsolutePath()}"
 //        File[] files = reportsDir.listFiles()
 //        for(File file : files){
         def files = steps.findFiles glob: "${path}/*.json"
         for(def file : files){
 //            if(file.getName().endsWith("json")){
-                steps.echo "Parsing JSON file: ${file.getPath()}"
                 List<JsonFeature> features = parseCucumberJsonReport(file.getPath())
                 mergedReport = mergeReport(mergedReport, features)
 //            }
