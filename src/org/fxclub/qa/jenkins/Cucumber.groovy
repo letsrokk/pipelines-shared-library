@@ -6,7 +6,6 @@ package org.fxclub.qa.jenkins
 ])
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.fxclub.qa.jenkins.internal.JsonFeature
-import com.cloudbees.groovy.cps.NonCPS
 
 class Cucumber implements Serializable {
 
@@ -16,7 +15,7 @@ class Cucumber implements Serializable {
         this.steps = steps
     }
 
-    @NonCPS
+    //@NonCPS
     List<JsonFeature> parseCucumberJsonReport(path){
         def mapper = new ObjectMapper()
         def json = mapper.readValue(
@@ -30,7 +29,7 @@ class Cucumber implements Serializable {
         writeReport(report, 'target/cucumber-report')
     }
 
-    @NonCPS
+    //@NonCPS
     def writeReport(List<JsonFeature> report, path){
         ObjectMapper mapper = new ObjectMapper()
 //        def jsonInString = mapper.writeValueAsString(report)
@@ -45,7 +44,7 @@ class Cucumber implements Serializable {
         steps.writeFile file: "${cucumberReportJson}", text: "${jsonReport}"
     }
 
-    @NonCPS
+    //@NonCPS
     def mergeReport(List<JsonFeature> mergedReport, List<JsonFeature>... toMergeCollections){
         for(List<JsonFeature> toMergeFeatures : toMergeCollections){
             if(mergedReport.size() == 0){
@@ -69,9 +68,11 @@ class Cucumber implements Serializable {
         return mergedReport
     }
 
-    @NonCPS
+    //@NonCPS
     List<JsonFeature> getReport(){
+        steps.echo 'Generate Report JSON'
         def mergedReport = new ArrayList<JsonFeature>()
+        steps.echo "${mergedReport}"
         def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
         reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
             if(it.name.endsWith('.json')) {
@@ -79,6 +80,7 @@ class Cucumber implements Serializable {
                 mergedReport = mergeReport(mergedReport, features)
             }
         }
+        steps.echo "DONE! ${mergedReport}"
         return mergedReport
     }
 
