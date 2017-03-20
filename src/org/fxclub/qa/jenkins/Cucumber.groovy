@@ -40,7 +40,8 @@ class Cucumber implements Serializable {
 //        mapper.writeValue(jsonReport, report)
         def cucumberReportJson = "${path}/cucumber.json"
         steps.echo "${cucumberReportJson}"
-        steps.writeFile file: "${cucumberReportJson}", text: mapper.writeValueAsString(report)
+        def jsonReport = mapper.writeValueAsString(report)
+        steps.writeFile file: "${cucumberReportJson}", text: "${jsonReport}"
     }
 
     @NonCPS
