@@ -15,9 +15,10 @@ class Cucumber implements Serializable {
     }
 
     List<JsonFeature> parseCucumberJsonReport(path){
+        def jsonString = steps.readJSON file: "${path}"
         ObjectMapper mapper = new ObjectMapper()
         List<JsonFeature> json = mapper.readValue(
-                new File("${path}").text,
+                jsonString,
                 JsonFeature[]
         )
         return json
