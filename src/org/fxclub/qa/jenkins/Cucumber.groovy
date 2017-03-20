@@ -26,12 +26,12 @@ class Cucumber implements Serializable {
         return json
     }
 
-    def writeReport(report){
+    def writeReport(List<JsonFeature> report){
         writeReport(report, 'target/cucumber-report')
     }
 
     @NonCPS
-    def writeReport(report, path){
+    def writeReport(List<JsonFeature> report, path){
         ObjectMapper mapper = new ObjectMapper()
 //        def jsonInString = mapper.writeValueAsString(report)
 //        File jsonReport = new File("${path}/cucumber.json")
@@ -40,7 +40,8 @@ class Cucumber implements Serializable {
 //        mapper.writeValue(jsonReport, report)
         def cucumberReportJson = "${path}/cucumber.json"
         steps.echo "${cucumberReportJson}"
-        def jsonReport = mapper.writeValueAsString(report)
+        def jsonReport = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report)
+        steps.echo "${jsonReport}"
         steps.writeFile file: "${cucumberReportJson}", text: "${jsonReport}"
     }
 
@@ -69,8 +70,8 @@ class Cucumber implements Serializable {
     }
 
     @NonCPS
-    def getReport(){
-        def mergedReport = new ArrayList()
+    List<JsonFeature> getReport(){
+        def mergedReport = new ArrayList<JsonFeature>()
         def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
         reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
             if(it.name.endsWith('.json')) {
