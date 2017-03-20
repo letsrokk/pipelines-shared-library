@@ -76,6 +76,7 @@ class Cucumber implements Serializable {
         def reportsDir = new File('/Users/majer-dy/Documents/IDEA/registration-services/target/cucumber-parallel')
         reportsDir.eachFileRecurse(groovy.io.FileType.FILES) {
             if(it.name.endsWith('.json')) {
+                steps.echo "Parsing JSON file: ${it.getAbsolutePath()}"
                 List<JsonFeature> features = parseCucumberJsonReport(it.getAbsolutePath())
                 mergedReport = mergeReport(mergedReport, features)
             }
