@@ -6,6 +6,7 @@ package org.fxclub.qa.jenkins
 ])
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.fxclub.qa.jenkins.internal.JsonFeature
+import com.cloudbees.groovy.cps.NonCPS
 
 class Cucumber implements Serializable {
 
