@@ -7,13 +7,22 @@ class Reports implements Serializable{
         this.steps = steps
     }
 
-    def storeCucumberReport(){
-        storeCucumberReport('target/surefire-reports/junitreports/TEST*.xml')
+    def storeCucumberTestNGReport(){
+        storeCucumberTestNGReport('target/surefire-reports/junitreports/TEST*.xml')
     }
 
-    def storeCucumberReport(path){
+    def storeCucumberTestNGReport(path){
         steps.echo "Publishing Cucumber JVM reports: ${path}"
         steps.junit allowEmptyResults: true, testResults: "${path}"
+    }
+
+    def storeCucumberJSONReport(){
+        storeCucumberJSONReport('**/cucumber.json')
+    }
+
+    def storeCucumberJSONReport(glob){
+        steps.echo "Publishing Cucumber JSON reports: ${glob}"
+        steps.step($class: 'CucumberTestResultArchiver', testResults: "${glob}")
     }
 
     def buildAllureReport(){
