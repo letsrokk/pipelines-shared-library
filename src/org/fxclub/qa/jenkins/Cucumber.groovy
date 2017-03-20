@@ -23,7 +23,7 @@ class Cucumber implements Serializable {
     @NonCPS
     def writeReport(List<JsonFeature> report, path = 'target/cucumber-report'){
         ObjectMapper mapper = new ObjectMapper()
-        String jsonInString = mapper.writeValueAsString(report)
+        def jsonInString = mapper.writeValueAsString(report)
         File jsonReport = new File("${path}/cucumber.json")
         jsonReport.getParentFile().mkdirs()
         jsonReport.createNewFile()
@@ -38,7 +38,7 @@ class Cucumber implements Serializable {
                 continue
             }
             for(JsonFeature toMergeFeature : toMergeFeatures){
-                boolean matched = false
+                def matched = false
                 for(JsonFeature baseFeature : mergedReport){
                     if(baseFeature.isSame(toMergeFeature)){
                         baseFeature.elements.addAll(toMergeFeature.elements)
