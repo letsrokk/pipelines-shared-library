@@ -63,10 +63,17 @@ class Cucumber implements Serializable {
         getReport('target/cucumber-parallel')
     }
 
+    def findJsonReports(path){
+        files = steps.findFiles(glob: "${path}/*.json")
+        files.each{
+            file -> it.
+        }
+    }
+
     List<JsonFeature> getReport(path){
-        steps.echo "Merge Cucumber JSON reports: ${path}"
         List<JsonFeature> mergedReport = new ArrayList<JsonFeature>()
         File reportsDir = new File("${path}")
+        steps.echo "Merge Cucumber JSON reports: ${reportsDir.getAbsolutePath()}"
         File[] files = reportsDir.listFiles()
         for(File file : files){
             if(file.getName().endsWith("json")){
