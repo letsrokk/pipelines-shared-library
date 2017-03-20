@@ -27,7 +27,7 @@ class Cucumber implements Serializable {
     }
 
     def writeReport(report){
-        writeReport(report, ' = \'target/cucumber-report\'')
+        writeReport(report, 'target/cucumber-report')
     }
 
     @NonCPS
@@ -38,7 +38,9 @@ class Cucumber implements Serializable {
 //        jsonReport.getParentFile().mkdirs()
 //        jsonReport.createNewFile()
 //        mapper.writeValue(jsonReport, report)
-        steps.writeFile file: "${path}/cucumber.json", text: mapper.writeValueAsString(report)
+        def cucumberReportJson = "${path}/cucumber.json"
+        steps.echo "${cucumberReportJson}"
+        steps.writeFile file: "${cucumberReportJson}", text: mapper.writeValueAsString(report)
     }
 
     @NonCPS
