@@ -84,7 +84,7 @@ class Cucumber implements Serializable {
     }
 
     String mergeCucumberJSONReports(path){
-        List<JsonFeature> mergedJSON = cucumber.getReport(path)
+        List<JsonFeature> mergedJSON = getReport(path)
         return writeReport(mergedJSON)
     }
 
