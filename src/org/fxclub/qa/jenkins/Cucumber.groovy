@@ -26,10 +26,14 @@ class Cucumber implements Serializable {
         return json
     }
 
+    def writeReport(report){
+        writeReport(report, ' = \'target/cucumber-report\'')
+    }
+
     @NonCPS
-    def writeReport(List<JsonFeature> report, path = 'target/cucumber-report'){
+    def writeReport(report, path){
         ObjectMapper mapper = new ObjectMapper()
-        def jsonInString = mapper.writeValueAsString(report)
+//        def jsonInString = mapper.writeValueAsString(report)
 //        File jsonReport = new File("${path}/cucumber.json")
 //        jsonReport.getParentFile().mkdirs()
 //        jsonReport.createNewFile()
