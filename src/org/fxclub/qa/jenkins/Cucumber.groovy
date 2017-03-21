@@ -15,7 +15,7 @@ class Cucumber implements Serializable {
     }
 
     List<JsonFeature> parseCucumberJsonReport(file){
-        steps.echo "Parsing JSON file: ${file.getPath()}"
+        //steps.echo "Parsing JSON file: ${file.getPath()}"
         def jsonString = steps.readFile("${file.getPath()}")
         ObjectMapper mapper = new ObjectMapper()
         List<JsonFeature> json = mapper.readValue(
