@@ -4,6 +4,7 @@ import org.fxclub.qa.jenkins.internal.JsonScenario
 
 class JsonFeature extends JsonBase {
 
+    List<JsonComment> comments
     def line
     List<JsonScenario> elements
     def name
@@ -32,6 +33,7 @@ class JsonFeature extends JsonBase {
 
         JsonFeature that = (JsonFeature) o
 
+        if (comments != that.comments) return false
         if (description != that.description) return false
         if (id != that.id) return false
         if (keyword != that.keyword) return false
@@ -41,4 +43,5 @@ class JsonFeature extends JsonBase {
 
         return true
     }
+
 }
