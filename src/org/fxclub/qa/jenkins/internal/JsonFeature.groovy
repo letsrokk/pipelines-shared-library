@@ -1,10 +1,8 @@
 package org.fxclub.qa.jenkins.internal
 
-import org.fxclub.qa.jenkins.internal.JsonScenario
-
 class JsonFeature extends JsonBase {
 
-    JsonComment[] comments
+    List<JsonComment> comments
     def line
     List<JsonScenario> elements
     def name
@@ -12,7 +10,7 @@ class JsonFeature extends JsonBase {
     def id
     def keyword
     def uri
-    JsonTag[] tags
+    List<JsonTag> tags
 
     JsonFeature(){
 
@@ -34,13 +32,13 @@ class JsonFeature extends JsonBase {
 
         JsonFeature that = (JsonFeature) o
 
-        if (!Arrays.equals(comments, that.comments)) return false
+        if (comments != that.comments) return false
         if (description != that.description) return false
         if (id != that.id) return false
         if (keyword != that.keyword) return false
         if (line != that.line) return false
         if (name != that.name) return false
-        if (!Arrays.equals(tags, that.tags)) return false
+        if (tags != that.tags) return false
         if (uri != that.uri) return false
 
         return true

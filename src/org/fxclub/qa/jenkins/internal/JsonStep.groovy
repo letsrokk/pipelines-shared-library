@@ -6,8 +6,8 @@ class JsonStep extends JsonBase {
     def line
     def name
     JsonStepMatch match
-    int[] matchedColumns
-    JsonStepRow[] rows
+    List<Integer> matchedColumns
+    List<JsonStepRow> rows
     def keyword
     
     class JsonStepResult extends JsonBase{

@@ -3,14 +3,14 @@ package org.fxclub.qa.jenkins.internal
 class JsonScenario extends JsonBase {
 
     def line
-    JsonComment[] comments
+    List<JsonComment> comments
     def name
     def description
     def id
     def type
     def keyword
-    JsonStep[] steps
-    JsonTag[] tags
+    List<JsonStep> steps
+    List<JsonTag> tags
 
     JsonScenario(){
 
