@@ -2,7 +2,7 @@ package org.fxclub.qa.jenkins.internal
 
 class JsonFeature extends JsonBase {
 
-    Set<JsonComment> comments
+    List<JsonComment> comments
     def line
     List<JsonScenario> elements
     def name
@@ -10,7 +10,7 @@ class JsonFeature extends JsonBase {
     def id
     def keyword
     def uri
-    Set<JsonTag> tags
+    List<JsonTag> tags
 
     JsonFeature(){
 
