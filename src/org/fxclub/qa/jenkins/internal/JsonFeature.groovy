@@ -26,7 +26,7 @@ class JsonFeature extends JsonBase {
                 '}'
     }
 
-    boolean isSame(o) {
+    boolean equals(o) {
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
@@ -44,4 +44,16 @@ class JsonFeature extends JsonBase {
         return true
     }
 
+    int hashCode() {
+        int result
+        result = (comments != null ? comments.hashCode() : 0)
+        result = 31 * result + (line != null ? line.hashCode() : 0)
+        result = 31 * result + (name != null ? name.hashCode() : 0)
+        result = 31 * result + (description != null ? description.hashCode() : 0)
+        result = 31 * result + (id != null ? id.hashCode() : 0)
+        result = 31 * result + (keyword != null ? keyword.hashCode() : 0)
+        result = 31 * result + (uri != null ? uri.hashCode() : 0)
+        result = 31 * result + (tags != null ? tags.hashCode() : 0)
+        return result
+    }
 }

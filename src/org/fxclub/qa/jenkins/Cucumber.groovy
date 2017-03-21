@@ -47,7 +47,7 @@ class Cucumber implements Serializable {
             for(JsonFeature toMergeFeature : toMergeFeatures){
                 def matched = false
                 for(JsonFeature baseFeature : mergedReport){
-                    if(baseFeature.isSame(toMergeFeature)){
+                    if(baseFeature.equals(toMergeFeature)){
                         baseFeature.elements.addAll(toMergeFeature.elements)
                         matched = true
                         break
