@@ -25,26 +25,14 @@ class Reports implements Serializable{
         steps.step($class: 'CucumberTestResultArchiver', testResults: "${glob}")
     }
 
-    def buildAllureReport(){
-        buildAllureReport('Allure Commandline','target/allure-results','target/allure-report')
-    }
-
-    def buildAllureReport(allureCommandlineToolName, resultsPath, reportsPath){
-        steps.echo "Building Allure Report: using ${allureCommandlineToolName}"
-        steps.echo "results: ${resultsPath}, reports: ${reportsPath}"
-
-        def allureHome = steps.tool "${allureCommandlineToolName}"
-        def allure = "${allureHome}/bin/allure"
-
-        steps.sh "${allure} generate ${resultsPath} -o ${reportsPath}"
-    }
-
     def storeAllureReport(){
-        buildAllureReport()
-        storeAllureReport('target/allure-report')
+        storeAllureReport('Allure2 Commandline','target/allure-results')
     }
 
-    def storeAllureReport(reportsPath){
+    def storeAllureReport(allureCommandlineToolName, resultsPath){
+        steps.sh "rm -rf allure-report/"
+        steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
+
         steps.echo "Publishing Allure Reports: ${reportsPath}"
         steps.publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${reportsPath}", reportFiles: 'index.html', reportName: 'Allure Report'])
     }
