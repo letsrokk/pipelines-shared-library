@@ -31,10 +31,8 @@ class Reports implements Serializable{
 
     def storeAllureReport(allureCommandlineToolName, resultsPath){
         steps.sh "rm -rf allure-report/"
+        steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
-
-        steps.echo "Publishing Allure Reports: ${reportsPath}"
-        steps.publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${reportsPath}", reportFiles: 'index.html', reportName: 'Allure Report'])
     }
 
 }
