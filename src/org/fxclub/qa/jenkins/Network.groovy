@@ -10,9 +10,9 @@ class Network implements Serializable {
     def steps
     def env
     def hostname
-    Network(steps, env){
+    Network(steps){
         this.steps = steps
-        this.env = env
+        this.env = steps.env
         this.hostname = InetAddress.getLocalHost().getHostName()
     }
 
