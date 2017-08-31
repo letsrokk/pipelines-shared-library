@@ -1,9 +1,5 @@
 package org.fxclub.qa.jenkins
 
-@Grapes(
-        @Grab(group='org.jenkins-ci.main', module='jenkins-core', version='2.76', scope='provided')
-)
-
 import jenkins.model.Jenkins;
 import hudson.slaves.SlaveComputer;
 import hudson.slaves.DumbSlave;
