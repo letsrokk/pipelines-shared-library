@@ -9,15 +9,16 @@ class Network implements Serializable {
 
     def steps
     def env
-    Network(steps, env){
+    def hostname
+    Network(steps, env, hostname){
         this.steps = steps
         this.env = env
+        this.hostname = hostname
     }
 
     def getHost() {
         def computer = Jenkins.getInstance().getComputer(env.NODE_NAME);
         if (!(computer instanceof SlaveComputer)) {
-            def hostname = "${HOSTNAME}"
             return InetAddress.getByName(hostname).address.collect { it & 0xFF }.join('.')
         } else {
             def node = computer.getNode();
