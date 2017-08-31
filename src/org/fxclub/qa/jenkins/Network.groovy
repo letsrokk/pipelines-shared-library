@@ -11,6 +11,11 @@ import hudson.plugins.sshslaves.SSHLauncher;
 
 class Network implements Serializable {
 
+    def steps
+    Network(steps){
+        this.steps = steps
+    }
+
     def getHost() {
         def computer = Jenkins.getInstance().getComputer(env.NODE_NAME);
         if (!(computer instanceof SlaveComputer)) {
