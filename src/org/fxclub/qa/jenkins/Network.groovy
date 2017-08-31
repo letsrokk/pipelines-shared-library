@@ -8,8 +8,10 @@ import hudson.plugins.sshslaves.SSHLauncher;
 class Network implements Serializable {
 
     def steps
-    Network(steps){
+    def env
+    Network(steps, env){
         this.steps = steps
+        this.env = env
     }
 
     def getHost() {
