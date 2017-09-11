@@ -3,6 +3,7 @@ package org.fxclub.qa.jenkins.internal
 class JsonStep extends JsonBase {
 
     JsonStepResult result
+    List<JsonStepComment> comments
     def line
     def name
     JsonStepMatch match
@@ -16,6 +17,15 @@ class JsonStep extends JsonBase {
         def error_message
 
         JsonStepResult(){
+
+        }
+    }
+
+    class JsonStepComment extends JsonBase{
+        def line
+        def value
+
+        JsonStepComment(){
 
         }
     }
