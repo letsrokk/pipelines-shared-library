@@ -1,8 +1,8 @@
 package org.fxclub.qa.jenkins
 
 @Grapes([
-        @Grab(group='com.fasterxml.jackson.core', module='jackson-core', version='2.9.0'),
-        @Grab(group='com.fasterxml.jackson.core', module='jackson-databind', version='2.9.0')
+        @Grab(group='com.fasterxml.jackson.core', module='jackson-core', version='2.9.0.pr1'),
+        @Grab(group='com.fasterxml.jackson.core', module='jackson-databind', version='2.9.0.pr1')
 ])
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.fxclub.qa.jenkins.internal.JsonFeature
