@@ -21,15 +21,6 @@ class JsonStep extends JsonBase {
         }
     }
 
-    class JsonStepComment extends JsonBase{
-        def line
-        def value
-
-        JsonStepComment(){
-
-        }
-    }
-
     @Override
     String toString() {
         return "JsonStep{" +
