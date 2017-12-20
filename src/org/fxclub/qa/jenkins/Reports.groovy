@@ -35,4 +35,35 @@ class Reports implements Serializable{
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
     }
 
+    def convertAllureInfluxDbExportToMap(path){
+        def stringMap = steps.readFile(path)
+        def customMap = [:]
+        stringMap.tokenize('\n').each {
+            lines = it.tokenize(' ')
+            customMap.put(lines[0], [:])
+        }
+        stringMap.tokenize('\n').each {
+            def lines = it.tokenize(' ')
+            def measure = customMap.get(lines[0])
+            def value = lines[1].tokenize('=')
+
+            measure.put(value[0],parseValue(value[1]))
+            customMap.put(lines[0], measure)
+        }
+        return customMap
+    }
+
+    def parseValue(value){
+        try{
+            return Boolean.parseLong(value)
+        }catch (Exception ignore){}
+        try{
+            return Long.parseLong(value)
+        }catch (Exception ignore){}
+        try{
+            return Double.parseLong(value)
+        }catch (Exception ignore){}
+        return value
+    }
+
 }
