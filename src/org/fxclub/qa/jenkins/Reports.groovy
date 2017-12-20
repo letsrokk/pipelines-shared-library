@@ -62,6 +62,8 @@ class Reports implements Serializable{
     }
 
     def exportToInfluxDb(target, customMap){
+        println("InfluxDB: " + target)
+        println("Map: " + customMap)
         steps.step([$class: 'InfluxDbPublisher',
               customData: null,
               customDataMap: customMap,
