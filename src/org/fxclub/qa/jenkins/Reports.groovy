@@ -35,6 +35,10 @@ class Reports implements Serializable{
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
     }
 
+    def convertAllureInfluxDbExportToMap(){
+        convertAllureInfluxDbExportToMap('allure-report/export/influxDbData.txt')
+    }
+
     def convertAllureInfluxDbExportToMap(path){
         def stringMap = steps.readFile(path)
         def customMap = [:]
@@ -51,6 +55,18 @@ class Reports implements Serializable{
             customMap.put(lines[0], measure)
         }
         return customMap
+    }
+
+    def exportToInfluxDb(){
+        exportToInfluxDb('test-executions',convertAllureInfluxDbExportToMap())
+    }
+
+    def exportToInfluxDb(target, customMap){
+        steps.step([$class: 'InfluxDbPublisher',
+              customData: null,
+              customDataMap: customMap,
+              customPrefix: null,
+              target: target])
     }
 
     def parseValue(value){
