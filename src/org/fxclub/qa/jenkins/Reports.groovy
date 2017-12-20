@@ -39,7 +39,7 @@ class Reports implements Serializable{
         def stringMap = steps.readFile(path)
         def customMap = [:]
         stringMap.tokenize('\n').each {
-            lines = it.tokenize(' ')
+            def lines = it.tokenize(' ')
             customMap.put(lines[0], [:])
         }
         stringMap.tokenize('\n').each {
