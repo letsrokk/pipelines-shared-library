@@ -40,9 +40,9 @@ class Reports implements Serializable{
     }
 
     def convertAllureInfluxDbExportToMap(path){
-        println("Allure InfluxDB export:" + path)
+        steps.echo("Allure InfluxDB export:" + path)
         def stringMap = steps.readFile(path)
-        println(stringMap)
+        steps.echo(stringMap)
         def customMap = [:]
         stringMap.tokenize('\n').each {
             def lines = it.tokenize(' ')
@@ -56,7 +56,7 @@ class Reports implements Serializable{
             measure.put(value[0],parseValue(value[1]))
             customMap.put(lines[0], measure)
         }
-        println("Allure InfluxDB export map:" + customMap)
+        steps.echo("Allure InfluxDB export map:" + customMap)
         return customMap
     }
 
@@ -65,8 +65,8 @@ class Reports implements Serializable{
     }
 
     def exportToInfluxDb(target, customMap){
-        println("InfluxDB: " + target)
-        println("Map: " + customMap)
+        steps.echo("InfluxDB: " + target)
+        steps.echo("Map: " + customMap)
         steps.step([$class: 'InfluxDbPublisher',
               customData: null,
               customDataMap: customMap,
