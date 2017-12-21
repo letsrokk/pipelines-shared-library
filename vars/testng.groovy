@@ -1,4 +1,5 @@
 #!/usr/bin/groovy
+import org.apache.commons.lang3.StringUtils
 import org.w3c.dom.Attr
 import org.w3c.dom.Document
 import org.w3c.dom.Node
@@ -18,28 +19,45 @@ import javax.xml.transform.TransformerFactory
 import javax.xml.transform.TransformerFactoryConfigurationError
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import java.util.stream.Collectors
 
-mergeSuites("fxbank", "", "", "")
+//mergeSuites("/Users/majer-dy/Documents/IDEA/web-testing-framework", "fxbank", "news;audit;", "", "")
 
-def mergeSuites(String testProject, String suitesInclude, String suitesExclude, String groupsExclude) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
     System.out.println("Project: " + testProject)
-    System.out.println("Include suites: " + suitesInclude)
-    System.out.println("Exclude suites: " + suitesExclude)
-    System.out.println("Exclude groups: " + groupsExclude)
+    System.out.println("Include suites: " + suitesIncludeString)
+    System.out.println("Exclude suites: " + suitesExcludeString)
+    System.out.println("Exclude groups: " + groupsExcludeString)
 
-    File[] suitesToMerge = new File("suites/"+testProject).listFiles(new FileFilter() {
-        @Override
-        boolean accept(File pathname) {
-            return !file.isHidden() && file.getName().toLowerCase().endsWith(".xml")
+    def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? new ArrayList<>() : Arrays.asList(suitesIncludeString.split(';'))
+    def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? new ArrayList<>() : Arrays.asList(suitesExcludeString.split(';'))
+    def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? new ArrayList<>() : Arrays.asList(groupsExcludeString.split(';'))
+
+    def suitesDir = new File(basePath+"/suites/"+testProject)
+
+    File[] suitesForProject = suitesDir.listFiles({ File file ->
+        !file.hidden && file.name.toLowerCase().endsWith(".xml")
+    } as FileFilter)
+    def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
+
+    List<File> suitesToMerge = Arrays.stream(suitesForProject).filter({
+        def name = it.name.replace(".xml","")
+        if(!suitesInclude.isEmpty()){
+            return suitesInclude.contains(name)
+        } else {
+            return !suitesExclude.contains(name) && !skipSuites.contains(name)
         }
-    })
+    }).collect(Collectors.toList())
 
-    mergeXmlSuites(suitesToMerge, suitesInclude, suitesExclude, groupsExclude)
+    File template = new File(basePath + "/suites/_template.xml")
+    File targetXml = new File(basePath + "/suites/testng-merged.xml")
+
+    mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
 }
 
-private mergeXmlSuites(File[] suitesToMerge, String suites_include, String suites_exclude, String groups_exclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-    System.out.println("XML Suites for ")
-    Arrays.stream(suitesToMerge).forEach({
+def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    System.out.println("XML Suites for merge:")
+    suitesToMerge.forEach({
         System.out.println(it.getAbsolutePath())
     })
 
@@ -65,28 +83,12 @@ private mergeXmlSuites(File[] suitesToMerge, String suites_include, String suite
     }
     documentBuilder.setEntityResolver(entityResolver)
 
-    Document merged_suite = documentBuilder.parse(new File("suites/_template.xml"))
+    Document merged_suite = documentBuilder.parse(template)
 
     List<Document> suites = new ArrayList<>()
-    for(File suite : suitesToMerge){
-        String suitName = suite.getName().toLowerCase()
-        if(!StringUtils.isEmpty(suites_include)){
-            List<String> include = Arrays.asList(suites_include.split(";"))
-            if(include.contains(suitName.replace(".xml", "")))
-                suites.add(documentBuilder.parse(suite))
-        } else if(!StringUtils.isEmpty(suites_exclude)){
-            List<String> exclude = Arrays.asList(suites_exclude.split(";"))
-            if(exclude.contains(suitName.replace(".xml", "")))
-                continue
-            if(skip_suites.contains(suitName.replace(".xml", "")))
-                continue
-            suites.add(documentBuilder.parse(suite))
-        } else {
-            if(skip_suites.contains(suitName.replace(".xml", "")))
-                continue
-            suites.add(documentBuilder.parse(suite))
-        }
-    }
+    suitesToMerge.stream().forEach({
+        suites.add(documentBuilder.parse(it))
+    })
 
     Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
     for(Document suite : suites){
@@ -100,23 +102,21 @@ private mergeXmlSuites(File[] suitesToMerge, String suites_include, String suite
             importNode.getAttributes().setNamedItem(nameNode)
 
             merged_suite.adoptNode(importNode)
-            Node groups = setGroups(merged_suite,importNode,groups_exclude)
+            Node groups = setGroups(merged_suite,importNode,groupsExclude)
             if(groups != null)
                 importNode.appendChild(groups)
             suite_root.appendChild(importNode)
         }
     }
 
-    File merged_xml_file = new File("suites/testng-merged.xml")
-
     Transformer transformer = TransformerFactory.newInstance().newTransformer()
-    Result output = new StreamResult(new FileOutputStream(merged_xml_file))
+    Result output = new StreamResult(new FileOutputStream(targetXml))
     Source input = new DOMSource(merged_suite)
     transformer.transform(input, output)
 }
 
-private Node setGroups(Document suite, Node test, String exclude){
-    if(!StringUtils.isEmpty(exclude)){
+Node setGroups(Document suite, Node test, List<String> exclude){
+    if(!exclude.isEmpty()){
         Node groups = null
         NodeList testChilds = test.getChildNodes()
         for(int i = 0; i < testChilds.getLength(); i++){
@@ -130,9 +130,8 @@ private Node setGroups(Document suite, Node test, String exclude){
             groups = suite.createElement("groups")
         }
         Node run = suite.createElement("run")
-        if(!StringUtils.isEmpty(exclude)){
-            List<String> exclude_list = Arrays.asList(exclude.split(";"))
-            for(String group_name : exclude_list){
+        if(!exclude.isEmpty()){
+            for(String group_name : exclude){
                 Node include_element = suite.createElement("exclude")
                 Attr name_attribute = suite.createAttribute("name")
                 name_attribute.setNodeValue(group_name)
