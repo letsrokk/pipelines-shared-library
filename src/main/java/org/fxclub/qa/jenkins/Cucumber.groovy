@@ -2,7 +2,7 @@
 package org.fxclub.qa.jenkins
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.fxclub.qa.jenkins.internal.JsonFeature
+import org.fxclub.qa.jenkins.internal.cucumber.JsonFeature
 
 class Cucumber implements Serializable {
 

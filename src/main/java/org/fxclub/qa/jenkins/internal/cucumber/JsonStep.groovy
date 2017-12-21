@@ -1,4 +1,4 @@
-package org.fxclub.qa.jenkins.internal
+package org.fxclub.qa.jenkins.internal.cucumber
 
 class JsonStep extends JsonBase {
 

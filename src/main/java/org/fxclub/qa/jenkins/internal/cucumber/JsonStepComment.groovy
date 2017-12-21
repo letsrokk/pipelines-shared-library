@@ -1,4 +1,4 @@
-package org.fxclub.qa.jenkins.internal
+package org.fxclub.qa.jenkins.internal.cucumber
 
 class JsonStepComment extends JsonBase{
     Integer line
