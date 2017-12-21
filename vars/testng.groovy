@@ -25,7 +25,7 @@ def mergeSuites(String testProject, String suitesInclude, String suitesExclude, 
     System.out.println("Exclude suites: " + suitesExclude)
     System.out.println("Exclude groups: " + groupsExclude)
 
-    File[] suitesToMerge = new File("suites/"+project).listFiles(new FileFilter() {
+    File[] suitesToMerge = new File("suites/"+testProject).listFiles(new FileFilter() {
         @Override
         boolean accept(File pathname) {
             return !file.isHidden() && file.getName().toLowerCase().endsWith(".xml")
