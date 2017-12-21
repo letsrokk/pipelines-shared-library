@@ -32,10 +32,10 @@ def mergeSuites(String testProject, String suitesInclude, String suitesExclude, 
         }
     })
 
-    mergeSuites(suitesToMerge, suitesInclude, suitesExclude, groupsExclude)
+    mergeXmlSuites(suitesToMerge, suitesInclude, suitesExclude, groupsExclude)
 }
 
-def mergeSuites(File[] suitesToMerge, String suites_include, String suites_exclude, String groups_exclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+private mergeXmlSuites(File[] suitesToMerge, String suites_include, String suites_exclude, String groups_exclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
     DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
     EntityResolver entityResolver = new EntityResolver() {
