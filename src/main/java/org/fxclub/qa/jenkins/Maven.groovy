@@ -1,3 +1,4 @@
+#!/usr/bin/groovy
 package org.fxclub.qa.jenkins
 
 class Maven implements Serializable{
