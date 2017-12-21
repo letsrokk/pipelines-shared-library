@@ -19,6 +19,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
+mergeSuites("fxbank", "", "", "")
+
 def mergeSuites(String testProject, String suitesInclude, String suitesExclude, String groupsExclude) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
     System.out.println("Project: " + testProject)
     System.out.println("Include suites: " + suitesInclude)
@@ -36,6 +38,11 @@ def mergeSuites(String testProject, String suitesInclude, String suitesExclude, 
 }
 
 private mergeXmlSuites(File[] suitesToMerge, String suites_include, String suites_exclude, String groups_exclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    System.out.println("XML Suites for ")
+    Arrays.stream(suitesToMerge).forEach({
+        System.out.println(it.getAbsolutePath())
+    })
+
     DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
     EntityResolver entityResolver = new EntityResolver() {
