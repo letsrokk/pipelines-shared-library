@@ -1,6 +1,6 @@
 package org.fxclub.qa.jenkins
 
-import org.fxclub.qa.jenkins.internal.JsonFeature
+import org.fxclub.qa.jenkins.internal.cucumber.JsonFeature
 Cucumber cucumber = new Cucumber()
 
 List<JsonFeature> mergedReport = new ArrayList<>()
