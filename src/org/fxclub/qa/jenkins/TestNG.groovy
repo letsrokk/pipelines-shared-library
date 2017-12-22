@@ -21,44 +21,48 @@ import java.util.stream.Collectors
 
 class TestNG implements Serializable {
 
-    static def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
-        System.out.println("Project: " + testProject)
+    static void mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
+        try{
+            System.out.println("Project: " + testProject)
 
-        def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-        def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-        def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-        System.out.println("Include suites: " + suitesInclude.size())
-        System.out.println("Exclude suites: " + suitesExclude.size())
-        System.out.println("Exclude groups: " + groupsExclude.size())
+            def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+            def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+            def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+            System.out.println("Include suites: " + suitesInclude.size())
+            System.out.println("Exclude suites: " + suitesExclude.size())
+            System.out.println("Exclude groups: " + groupsExclude.size())
 
-        def suitesDir = new File(basePath+"/suites/"+testProject)
+            def suitesDir = new File(basePath+"/suites/"+testProject)
 
-        FileFilter filter = new FileFilter() {
-            @Override
-            boolean accept(File pathname) {
-                return !pathname.hidden && pathname.name.toLowerCase().endsWith(".xml")
+            FileFilter filter = new FileFilter() {
+                @Override
+                boolean accept(File pathname) {
+                    return !pathname.hidden && pathname.name.toLowerCase().endsWith(".xml")
+                }
             }
+            File[] suitesForProject = suitesDir.listFiles(filter)
+
+            def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
+
+            List<File> suitesToMerge = Arrays.stream(suitesForProject).filter({
+                def name = it.name.replace(".xml","")
+                if(!suitesInclude.isEmpty()){
+                    return suitesInclude.contains(name)
+                } else {
+                    return !suitesExclude.contains(name) && !skipSuites.contains(name)
+                }
+            }).collect(Collectors.toList())
+
+            File template = new File(basePath + "/suites/_template.xml")
+            File targetXml = new File(basePath + "/suites/org.fxclub.qa.jenkins.TestNG-merged.xml")
+
+            mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
+        }catch (Exception e){
+            e.printStackTrace()
         }
-        File[] suitesForProject = suitesDir.listFiles(filter)
-
-        def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
-
-        List<File> suitesToMerge = Arrays.stream(suitesForProject).filter({
-            def name = it.name.replace(".xml","")
-            if(!suitesInclude.isEmpty()){
-                return suitesInclude.contains(name)
-            } else {
-                return !suitesExclude.contains(name) && !skipSuites.contains(name)
-            }
-        }).collect(Collectors.toList())
-
-        File template = new File(basePath + "/suites/_template.xml")
-        File targetXml = new File(basePath + "/suites/org.fxclub.qa.jenkins.TestNG-merged.xml")
-
-        mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
 
-    private static def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
+    private static void mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
         System.out.println("XML Suites for merge:")
         suitesToMerge.forEach({
             System.out.println(it.getAbsolutePath())
