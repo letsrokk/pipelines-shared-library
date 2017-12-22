@@ -38,7 +38,9 @@ class TestNG implements Serializable {
             System.out.println("Exclude suites: " + suitesExclude.size())
             System.out.println("Exclude groups: " + groupsExclude.size())
 
-            def suitesDir = new File(basePath+"/suites/"+testProject)
+            steps.echo 1
+
+            File suitesDir = new File(basePath+"/suites/"+testProject)
 
             FileFilter filter = new FileFilter() {
                 @Override
@@ -47,6 +49,8 @@ class TestNG implements Serializable {
                 }
             }
             File[] suitesForProject = suitesDir.listFiles(filter)
+
+            steps.echo 2
 
             def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
@@ -59,8 +63,12 @@ class TestNG implements Serializable {
                 }
             }).collect(Collectors.toList())
 
+            steps.echo 3
+
             File template = new File(basePath + "/suites/_template.xml")
             File targetXml = new File(basePath + "/suites/org.fxclub.qa.jenkins.TestNG-merged.xml")
+
+            steps.echo 4
 
             mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
         }catch (Exception e){
