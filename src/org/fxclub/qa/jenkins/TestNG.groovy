@@ -1,6 +1,7 @@
 package org.fxclub.qa.jenkins
 
 import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.w3c.dom.Attr
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
@@ -63,7 +64,7 @@ class TestNG implements Serializable {
 
             mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
         }catch (Exception e){
-            steps.echo e.getMessage()
+            steps.echo ExceptionUtils.getStackTrace(e)
         }
     }
 
