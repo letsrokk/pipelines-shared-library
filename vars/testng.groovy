@@ -21,17 +21,17 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 import java.util.stream.Collectors
 
-//mergeSuites("/Users/majer-dy/Documents/IDEA/web-testing-framework", "fxbank", "news;audit;", "", "")
+mergeSuites("/Users/majer-dy/Documents/IDEA/web-testing-framework", "fxbank", "news;audit;", "", "")
 
 def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
     System.out.println("Project: " + testProject)
 
-    def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? new ArrayList<>() : Arrays.asList(suitesIncludeString.split(';'))
-    def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? new ArrayList<>() : Arrays.asList(suitesExcludeString.split(';'))
-    def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? new ArrayList<>() : Arrays.asList(groupsExcludeString.split(';'))
-    System.out.println("Include suites: " + suitesInclude)
-    System.out.println("Exclude suites: " + suitesExclude)
-    System.out.println("Exclude groups: " + groupsExclude)
+    def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+    def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+    def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+    System.out.println("Include suites: " + suitesInclude.size())
+    System.out.println("Exclude suites: " + suitesExclude.size())
+    System.out.println("Exclude groups: " + groupsExclude.size())
 
     def suitesDir = new File(basePath+"/suites/"+testProject)
 
