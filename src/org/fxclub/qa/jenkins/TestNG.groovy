@@ -21,6 +21,11 @@ import java.util.stream.Collectors
 
 class TestNG implements Serializable {
 
+    static def steps
+    TestNG(steps){
+        this.steps = steps
+    }
+
     static void mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         try{
             System.out.println("Project: " + testProject)
@@ -58,7 +63,7 @@ class TestNG implements Serializable {
 
             mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
         }catch (Exception e){
-            e.printStackTrace()
+            steps.echo e.getMessage()
         }
     }
 
