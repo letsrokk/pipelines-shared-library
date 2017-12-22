@@ -64,7 +64,7 @@ class TestNG implements Serializable {
 
             mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
         }catch (Exception e){
-            steps.echo ExceptionUtils.getStackTrace(e)
+            steps.echo ExceptionUtils.getStackTrace(e.getCause())
         }
     }
 
