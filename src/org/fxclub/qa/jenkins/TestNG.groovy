@@ -33,9 +33,14 @@ class TestNG implements Serializable {
 
         def suitesDir = new File(basePath+"/suites/"+testProject)
 
-        File[] suitesForProject = suitesDir.listFiles({ File file ->
-            !file.hidden && file.name.toLowerCase().endsWith(".xml")
-        } as FileFilter)
+        FileFilter filter = new FileFilter() {
+            @Override
+            boolean accept(File pathname) {
+                return !pathname.hidden && pathname.name.toLowerCase().endsWith(".xml")
+            }
+        }
+        File[] suitesForProject = suitesDir.listFiles(filter)
+
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
         List<File> suitesToMerge = Arrays.stream(suitesForProject).filter({
