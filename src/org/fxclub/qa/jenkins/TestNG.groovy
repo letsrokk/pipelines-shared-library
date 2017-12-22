@@ -43,13 +43,20 @@ class TestNG implements Serializable {
 
             File suitesDir = new File(basePath+"/suites/"+testProject)
 
+            steps.echo "1.1"
+
             FileFilter filter = new FileFilter() {
                 @Override
                 boolean accept(File pathname) {
                     return !pathname.hidden && pathname.name.toLowerCase().endsWith(".xml")
                 }
             }
+
+            steps.echo "1.2"
+
             File[] suitesForProject = suitesDir.listFiles(filter)
+
+            steps.echo "1.3"
 
             steps.echo "2"
 
