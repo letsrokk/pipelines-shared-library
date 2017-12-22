@@ -29,6 +29,7 @@ class TestNG implements Serializable {
 
     static void mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         try{
+            steps.echo 0
             System.out.println("Project: " + testProject)
 
             def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
