@@ -45,16 +45,15 @@ class TestNG implements Serializable {
 
             steps.echo "1.1"
 
-            FileFilter filter = new FileFilter() {
-                @Override
-                boolean accept(File pathname) {
-                    return !pathname.hidden && pathname.name.toLowerCase().endsWith(".xml")
+            def filter = new FilenameFilter() {
+                boolean accept(File path, String filename) {
+                    return filename.toLowerCase().matches(/.*\.xml/)
                 }
             }
 
             steps.echo "1.2"
 
-            File[] suitesForProject = suitesDir.listFiles(filter)
+            List<File> suitesForProject = Arrays.stream(suitesDir.list(filter)).map({new File(it)}).collect(Collectors.toList())
 
             steps.echo "1.3"
 
