@@ -11,20 +11,17 @@ import org.xml.sax.SAXException
 
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 import javax.xml.transform.Result
 import javax.xml.transform.Source
 import javax.xml.transform.Transformer
-import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
-import javax.xml.transform.TransformerFactoryConfigurationError
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 import java.util.stream.Collectors
 
-class TestNG implements Serializable{
+class TestNG implements Serializable {
 
-    static def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+    static def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         System.out.println("Project: " + testProject)
 
         def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
@@ -56,7 +53,7 @@ class TestNG implements Serializable{
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
 
-    private static def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    private static def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
         System.out.println("XML Suites for merge:")
         suitesToMerge.forEach({
             System.out.println(it.getAbsolutePath())
@@ -116,7 +113,7 @@ class TestNG implements Serializable{
         transformer.transform(input, output)
     }
 
-    private static Node setGroups(Document suite, Node test, List<String> exclude){
+    private static Node setGroups(Document suite, Node test, List<String> exclude) {
         if(!exclude.isEmpty()){
             Node groups = null
             NodeList testChilds = test.getChildNodes()
