@@ -21,7 +21,7 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 import java.util.stream.Collectors
 
-mergeSuites("/Users/majer-dy/Documents/IDEA/web-testing-framework", "fxbank", "news;audit;", "", "")
+//mergeSuites("/Users/majer-dy/Documents/IDEA/web-testing-framework", "fxbank", "news;audit;", "", "")
 
 def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
     System.out.println("Project: " + testProject)
