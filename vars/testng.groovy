@@ -25,13 +25,13 @@ import java.util.stream.Collectors
 
 def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
     System.out.println("Project: " + testProject)
-    System.out.println("Include suites: " + suitesIncludeString)
-    System.out.println("Exclude suites: " + suitesExcludeString)
-    System.out.println("Exclude groups: " + groupsExcludeString)
 
     def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? new ArrayList<>() : Arrays.asList(suitesIncludeString.split(';'))
     def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? new ArrayList<>() : Arrays.asList(suitesExcludeString.split(';'))
     def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? new ArrayList<>() : Arrays.asList(groupsExcludeString.split(';'))
+    System.out.println("Include suites: " + suitesInclude)
+    System.out.println("Exclude suites: " + suitesExclude)
+    System.out.println("Exclude groups: " + groupsExclude)
 
     def suitesDir = new File(basePath+"/suites/"+testProject)
 
