@@ -10,7 +10,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamResult
+import java.util.stream.Collectors;
 
 class TestNG implements Serializable {
 
@@ -31,7 +32,10 @@ class TestNG implements Serializable {
 
         def suitesPattern = "suites/" + testProject + "/**.xml"
 
-        List<File> suitesForProject = steps.findFiles glob: suitesPattern
+        List<?> wrappers = steps.findFiles glob: suitesPattern
+        List<File> suitesForProject = wrappers.stream().map({
+            wrapper -> new File(wrapper.getPath())
+        }).collect(Collectors.toList())
 
         steps.echo "Suites: " + suitesForProject
 
