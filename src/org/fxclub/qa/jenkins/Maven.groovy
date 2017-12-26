@@ -4,25 +4,21 @@ class Maven implements Serializable{
 
     def steps
     def mavenToolName
-    def mvnProfile = ''
 
     Maven(steps){
-        this('Maven 3.x', 'jenkins', steps)
+        this(steps, 'Maven 3.x')
     }
 
-    Maven(mavenToolName, mvnProfile, steps){
+    Maven(steps, mavenToolName){
         this.steps = steps
         this.mavenToolName = mavenToolName
-
-        if(mvnProfile != null)
-            this.mvnProfile = "-P ${mvnProfile}"
     }
 
     def goals(command) {
         def mvnHome = steps.tool "${mavenToolName}"
         def mvn = "${mvnHome}/bin/mvn"
 
-        def mvnCommand = "${mvn} ${mvnProfile} ${command}"
+        def mvnCommand = "${mvn} ${command}"
 
         steps.echo "Executing Maven goals: ${mvnCommand}"
         steps.sh "${mvnCommand}"
