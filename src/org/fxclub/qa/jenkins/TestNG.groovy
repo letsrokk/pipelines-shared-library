@@ -20,10 +20,6 @@ class TestNG implements Serializable {
     }
 
     def mergeSuites(String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
-        mergeSuites(null, testProject, suitesIncludeString, suitesExcludeString, groupsExcludeString)
-    }
-
-    def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         steps.echo "Project: ${testProject}"
 
         def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
@@ -33,18 +29,11 @@ class TestNG implements Serializable {
         steps.echo "Exclude suites: ${suitesExcludeString}"
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
-        if(StringUtils.isEmpty(basePath))
-            basePath = new File(".").getAbsolutePath()
-        File suitesDir = new File(basePath + "/suites/" + testProject + "/")
+        def suitesPattern = "suites/" + testProject + "/**.xml"
 
-        steps.sh "pwd"
+        List<File> suitesForProject = steps.findFiles glob: suitesPattern
 
-        steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
         steps.echo "Suites: " + suitesDir.list()
-
-        List<File> suitesForProject = Arrays.asList(suitesDir.listFiles()).findAll {
-            it.getName().toLowerCase().endsWith(".xml")
-        }
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
