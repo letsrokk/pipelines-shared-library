@@ -1,122 +1,68 @@
 package org.fxclub.qa.jenkins
 
-import org.apache.commons.lang3.StringUtils
-import org.apache.commons.lang3.exception.ExceptionUtils
-import org.w3c.dom.Attr
-import org.w3c.dom.Node
+import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList
-import org.w3c.dom.Document
-import org.xml.sax.EntityResolver
-import org.xml.sax.InputSource
-import org.xml.sax.SAXException
 
-import javax.xml.parsers.DocumentBuilder
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.Result
-import javax.xml.transform.Source
-import javax.xml.transform.Transformer
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-import java.util.stream.Collectors
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 class TestNG implements Serializable {
 
-    static def steps
+    def steps
     TestNG(steps){
         this.steps = steps
     }
 
-    static void mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
-        try{
-            steps.echo "0"
-            System.out.println("Project: " + testProject)
+    def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
+        steps.echo "Project: ${testProject}"
 
-            def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-            def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-            def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
-            System.out.println("Include suites: " + suitesInclude.size())
-            System.out.println("Exclude suites: " + suitesExclude.size())
-            System.out.println("Exclude groups: " + groupsExclude.size())
+        def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+        def suitesExclude = StringUtils.isEmpty(suitesExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+        def groupsExclude = StringUtils.isEmpty(groupsExcludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
+        steps.echo "Include suites: ${suitesIncludeString}"
+        steps.echo "Exclude suites: ${suitesExcludeString}"
+        steps.echo "Exclude groups: ${groupsExcludeString}"
 
-            steps.echo "1"
+        File suitesDir = new File(basePath+"/suites/"+testProject)
 
-            File suitesDir = new File(basePath+"/suites/"+testProject)
-
-            steps.echo "1.1"
-
-            def filter = new FilenameFilter() {
-                boolean accept(File path, String filename) {
-                    return filename.toLowerCase().matches(/.*\.xml/)
-                }
-            }
-
-            steps.echo "1.2"
-
-            List<File> suitesForProject = Arrays.stream(suitesDir.list(filter)).map({new File(it)}).collect(Collectors.toList())
-
-            steps.echo "1.3"
-
-            steps.echo "2"
-
-            def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
-
-            List<File> suitesToMerge = Arrays.stream(suitesForProject).filter({
-                def name = it.name.replace(".xml","")
-                if(!suitesInclude.isEmpty()){
-                    return suitesInclude.contains(name)
-                } else {
-                    return !suitesExclude.contains(name) && !skipSuites.contains(name)
-                }
-            }).collect(Collectors.toList())
-
-            steps.echo "3"
-
-            File template = new File(basePath + "/suites/_template.xml")
-            File targetXml = new File(basePath + "/suites/org.fxclub.qa.jenkins.TestNG-merged.xml")
-
-            steps.echo "4"
-
-            mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
-        }catch (Exception e){
-            steps.echo ExceptionUtils.getStackTrace(e)
+        List<File> suitesForProject = Arrays.asList(suitesDir.listFiles()).findAll {
+            it.getName().toLowerCase().endsWith(".xml")
         }
-    }
 
-    private static void mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
-        System.out.println("XML Suites for merge:")
-        suitesToMerge.forEach({
-            System.out.println(it.getAbsolutePath())
+        def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
+
+        List<File> suitesToMerge = suitesForProject.findAll({
+            def name = it.name.replace(".xml","")
+            if(!suitesInclude.isEmpty()){
+                return suitesInclude.contains(name)
+            } else {
+                return !suitesExclude.contains(name) && !skipSuites.contains(name)
+            }
         })
 
-        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        File template = new File(basePath + "/suites/_template.xml")
+        File targetXml = new File(basePath + "/suites/testng-merged.xml")
 
-        EntityResolver entityResolver = new EntityResolver() {
-            @Override
-            InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                URL url = new URL(systemId)
-                boolean isRedirect = true
-                while (isRedirect){
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-                    conn.setInstanceFollowRedirects(true)
-                    if(conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP || conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM){
-                        isRedirect = true
-                        url = new URL(conn.getHeaderField("Location"))
-                    } else {
-                        isRedirect = false
-                    }
-                }
-                return new InputSource(url.openStream())
-            }
-        }
-        documentBuilder.setEntityResolver(entityResolver)
+        mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
+    }
+
+    private def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
+        steps.echo "XML Suites for merge:" + suitesToMerge.toString()
+
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
         Document merged_suite = documentBuilder.parse(template)
 
         List<Document> suites = new ArrayList<>()
-        suitesToMerge.stream().forEach({
-            suites.add(documentBuilder.parse(it))
-        })
+        suitesToMerge.stream().each {
+            suite -> suites.add(documentBuilder.parse(suite))
+        }
 
         Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
         for(Document suite : suites){
@@ -143,7 +89,7 @@ class TestNG implements Serializable {
         transformer.transform(input, output)
     }
 
-    private static Node setGroups(Document suite, Node test, List<String> exclude) {
+    private Node setGroups(Document suite, Node test, List<String> exclude) {
         if(!exclude.isEmpty()){
             Node groups = null
             NodeList testChilds = test.getChildNodes()
