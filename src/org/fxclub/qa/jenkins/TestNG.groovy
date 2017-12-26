@@ -46,8 +46,10 @@ class TestNG implements Serializable {
             }
         })
 
-        File template = new File("suites/_template.xml")
-        File targetXml = new File("suites/testng-merged.xml")
+        String basePath = steps.pwd()
+
+        File template = new File(basePath + "/suites/_template.xml")
+        File targetXml = new File(basePath + "/suites/testng-merged.xml")
 
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
