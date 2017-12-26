@@ -32,7 +32,7 @@ class TestNG implements Serializable {
 
         def suitesPattern = "suites/" + testProject + "/**.xml"
 
-        steps.echo "Goovy Current Dir: " + System.getProperty("user.dir")
+        steps.echo "Goovy Current Dir: " + new File(".").listFiles()
 
         List<?> wrappers = steps.findFiles glob: suitesPattern
         List<File> suitesForProject = wrappers.stream().map({
