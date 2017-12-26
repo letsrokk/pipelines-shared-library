@@ -37,7 +37,7 @@ class TestNG implements Serializable {
             basePath = new File(".").getAbsolutePath()
         File suitesDir = new File(basePath + "/suites/" + testProject + "/")
 
-        steps.sh "ls -la"
+        steps.sh "pwd"
 
         steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
         steps.echo "Suites: " + suitesDir.list()
