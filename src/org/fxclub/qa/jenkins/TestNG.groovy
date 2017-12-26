@@ -19,6 +19,10 @@ class TestNG implements Serializable {
         this.steps = steps
     }
 
+    def mergeSuites(String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
+        mergeSuites(null, testProject, suitesIncludeString, suitesExcludeString, groupsExcludeString)
+    }
+
     def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         steps.echo "Project: ${testProject}"
 
@@ -29,7 +33,12 @@ class TestNG implements Serializable {
         steps.echo "Exclude suites: ${suitesExcludeString}"
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
-        File suitesDir = new File(basePath+"/suites/"+testProject)
+        File suitesDir
+        if(StringUtils.isEmpty(basePath)){
+            suitesDir = new File(basePath+"/suites/"+testProject)
+        } else {
+            suitesDir = new File("suites/"+testProject)
+        }
         steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
         steps.echo "Suites: " + suitesDir.list()
 
