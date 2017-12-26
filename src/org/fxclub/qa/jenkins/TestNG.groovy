@@ -30,7 +30,8 @@ class TestNG implements Serializable {
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
         File suitesDir = new File(basePath+"/suites/"+testProject)
-        steps.echo "Suites path: " + suitesDir.getAbsolutePath()
+        steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
+        steps.echo "Suites: " + suitesDir.list()
 
         List<File> suitesForProject = Arrays.asList(suitesDir.listFiles()).findAll {
             it.getName().toLowerCase().endsWith(".xml")
