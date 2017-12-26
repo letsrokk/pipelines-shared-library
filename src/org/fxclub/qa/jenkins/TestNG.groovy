@@ -33,8 +33,9 @@ class TestNG implements Serializable {
         steps.echo "Exclude suites: ${suitesExcludeString}"
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
-        String workspacePath = steps.pwd
-        File suitesDir = new File(workspacePath + "/suites/" + testProject + "/")
+        if(StringUtils.isEmpty(basePath))
+            basePath = new File(".").getAbsolutePath()
+        File suitesDir = new File(basePath + "/suites/" + testProject + "/")
 
         steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
         steps.echo "Suites: " + suitesDir.list()
