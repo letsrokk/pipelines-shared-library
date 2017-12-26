@@ -37,7 +37,7 @@ class TestNG implements Serializable {
         if(StringUtils.isEmpty(basePath)){
             suitesDir = new File(basePath+"/suites/"+testProject)
         } else {
-            suitesDir = new File("suites/"+testProject)
+            suitesDir = new File("./suites/"+testProject)
         }
         steps.echo "Suites path: " + suitesDir.getAbsolutePath() + suitesDir.exists()
         steps.echo "Suites: " + suitesDir.list()
