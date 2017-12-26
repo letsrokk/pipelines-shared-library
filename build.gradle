@@ -8,6 +8,9 @@ version '1.0-SNAPSHOT'
 apply plugin: 'groovy'
 
 repositories {
+    maven {
+        url 'https://repo.jenkins-ci.org/public'
+    }
     mavenCentral()
     jcenter()
 }
@@ -15,5 +18,8 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
+    compile group: 'org.jenkins-ci.main', name: 'jenkins-core', version: '2.97'
+
     testImplementation(group: 'junit', name: 'junit', version: '4.12')
 }
