@@ -33,7 +33,7 @@ class TestNG implements Serializable {
 
         List<File> suitesForProject = steps.findFiles glob: suitesPattern
 
-        steps.echo "Suites: " + suitesDir.list()
+        steps.echo "Suites: " + suitesForProject
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
@@ -46,8 +46,8 @@ class TestNG implements Serializable {
             }
         })
 
-        File template = new File(basePath + "/suites/_template.xml")
-        File targetXml = new File(basePath + "/suites/testng-merged.xml")
+        File template = new File("suites/_template.xml")
+        File targetXml = new File("suites/testng-merged.xml")
 
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
