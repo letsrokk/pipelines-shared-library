@@ -23,6 +23,11 @@ class TestNG implements Serializable {
         this.steps = steps
     }
 
+    def publishTestNGReport(){
+        steps.junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+        steps.publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'emailable-report.html', reportName: 'TestNG Report'])
+    }
+
     def mergeSuites(String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         mergeSuites(null, testProject, suitesIncludeString, suitesExcludeString, groupsExcludeString)
     }
