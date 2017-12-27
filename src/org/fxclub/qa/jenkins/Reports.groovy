@@ -77,7 +77,10 @@ class Reports implements Serializable{
     }
 
     def exportToInfluxDb(){
-        exportToInfluxDb('test-executions',convertAllureInfluxDbExportToMap())
+        def allureMap = convertAllureInfluxDbExportToMap()
+        def paramsMap = converJobParamsToMap()
+        def customMap = allureMap + paramsMap
+        exportToInfluxDb('test-executions', customMap)
     }
 
     def exportToInfluxDb(target, customMap){
