@@ -1,6 +1,17 @@
 package org.fxclub.qa.jenkins
 
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
+import org.w3c.dom.Attr
+import org.w3c.dom.Document
+
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.Result
+import javax.xml.transform.Source
+import javax.xml.transform.Transformer
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 
 class TestNG implements Serializable {
 
@@ -37,26 +48,23 @@ class TestNG implements Serializable {
 
         String basePath = steps.pwd()
 
-        String template = basePath + "suites/_template.xml"
+        String template = steps.readFile basePath + "suites/_template.xml"
         String targetXml = basePath + "suites/testng-merged.xml"
 
-        mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
+        mergeXmlSuites(suitesToMerge, template, groupsExclude)
     }
 
-    private def mergeXmlSuites(def suitesToMerge, String template, String targetXml, List<String> groupsExclude) {
-        steps.echo "XML Suites for merge:" + suitesToMerge.toString()
+    private def mergeXmlSuites(def suitesToMerge, String template, List<String> groupsExclude) {
+        steps.echo "XML Suites for merge: " + suitesToMerge.toString()
+        steps.echo "XML Template: " + template
 
-        Node merged_suite = new XmlParser().parseText(readFile(template))
-
-//        steps.writeFile file: targetXml, text: merged_suite.toString()
-        /*
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
-        Document merged_suite = documentBuilder.parse(readFileToInputStream(template))
+        Document merged_suite = documentBuilder.parse(IOUtils.toInputStream(template))
 
         List<Document> suites = new ArrayList<>()
         suitesToMerge.each {
-            suites.add(documentBuilder.parse(readFileToInputStream(it.path)))
+            suites.add(documentBuilder.parse(IOUtils.toInputStream(template)))
         }
 
         Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
@@ -83,9 +91,6 @@ class TestNG implements Serializable {
         Result output = new StreamResult(baos)
         Source input = new DOMSource(merged_suite)
         transformer.transform(input, output)
-
-        writeFile(targetXml, baos.toString())
-        */
     }
 
 //    String readFile(String path){
@@ -101,34 +106,34 @@ class TestNG implements Serializable {
 //        steps.writeFile file: path, text: content
 //    }
 //
-//    private Node setGroups(Document suite, Node test, List<String> exclude) {
-//        if(!exclude.isEmpty()){
-//            Node groups = null
-//            NodeList testChilds = test.getChildNodes()
-//            for(int i = 0; i < testChilds.getLength(); i++){
-//                Node child = testChilds.item(i)
-//                if(child.getNodeName() == "groups"){
-//                    groups = testChilds.item(i)
-//                    break
-//                }
-//            }
-//            if(groups == null){
-//                groups = (Node) suite.createElement("groups")
-//            }
-//            Node run = (Node) suite.createElement("run")
-//            if(!exclude.isEmpty()){
-//                for(String group_name : exclude){
-//                    Node include_element = (Node) suite.createElement("exclude")
-//                    Attr name_attribute = suite.createAttribute("name")
-//                    name_attribute.setNodeValue(group_name)
-//                    include_element.getAttributes().setNamedItem(name_attribute)
-//                    run.appendChild(include_element)
-//                }
-//            }
-//            groups.appendChild(run)
-//            return groups
-//        }
-//        return null
-//    }
+    private Node setGroups(Document suite, Node test, List<String> exclude) {
+        if(!exclude.isEmpty()){
+            Node groups = null
+            NodeList testChilds = test.getChildNodes()
+            for(int i = 0; i < testChilds.getLength(); i++){
+                Node child = testChilds.item(i)
+                if(child.getNodeName() == "groups"){
+                    groups = testChilds.item(i)
+                    break
+                }
+            }
+            if(groups == null){
+                groups = (Node) suite.createElement("groups")
+            }
+            Node run = (Node) suite.createElement("run")
+            if(!exclude.isEmpty()){
+                for(String group_name : exclude){
+                    Node include_element = (Node) suite.createElement("exclude")
+                    Attr name_attribute = suite.createAttribute("name")
+                    name_attribute.setNodeValue(group_name)
+                    include_element.getAttributes().setNamedItem(name_attribute)
+                    run.appendChild(include_element)
+                }
+            }
+            groups.appendChild(run)
+            return groups
+        }
+        return null
+    }
 
 }
