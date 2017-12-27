@@ -40,14 +40,18 @@ class TestNG implements Serializable {
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
-        def suitesToMerge = suitesForProject.findAll({
+        List<String> suitesToMerge
+        suitesForProject.findAll({
             def name = it.name.replace(".xml","")
             if(!suitesInclude.isEmpty()){
                 return suitesInclude.contains(name)
             } else {
                 return !suitesExclude.contains(name) && !skipSuites.contains(name)
             }
-        })
+        }).each {
+            def suite = steps.readFile it.path
+            suitesToMerge.add(suite)
+        }
 
         String basePath = steps.pwd()
 
