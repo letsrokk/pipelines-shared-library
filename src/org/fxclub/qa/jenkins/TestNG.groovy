@@ -54,7 +54,7 @@ class TestNG implements Serializable {
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
 
-    private def mergeXmlSuites(List<?> suitesToMerge, def template, def targetXml, List<String> groupsExclude) {
+    private def mergeXmlSuites(def suitesToMerge, def template, def targetXml, List<String> groupsExclude) {
         steps.echo "XML Suites for merge:" + suitesToMerge.toString()
 
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
@@ -63,7 +63,7 @@ class TestNG implements Serializable {
 
         List<Document> suites = new ArrayList<>()
         suitesToMerge.each {
-            suites.add(documentBuilder.parse(readFileToInputStream(it.getPath())))
+            suites.add(documentBuilder.parse(readFileToInputStream(it.path)))
         }
 
         Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
