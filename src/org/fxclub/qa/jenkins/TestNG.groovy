@@ -53,7 +53,7 @@ class TestNG implements Serializable {
 
         Node merged_suite = parser.parseText(readFile(template))
 
-        steps.writeFile file: targetXml, text: merged_suite.toString()
+//        steps.writeFile file: targetXml, text: merged_suite.toString()
         /*
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
