@@ -25,6 +25,11 @@ class Reports implements Serializable{
         steps.step($class: 'CucumberTestResultArchiver', testResults: "${glob}")
     }
 
+    def publishTestNGReport(){
+        steps.junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+        steps.publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'emailable-report.html', reportName: 'TestNG Report'])
+    }
+
     def storeAllureReport(){
         storeAllureReport('Allure2 Commandline','target/allure-results')
     }
