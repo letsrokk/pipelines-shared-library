@@ -37,10 +37,12 @@ class TestNG implements Serializable {
         steps.echo "Exclude suites: ${suitesExcludeString}"
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
-        def suitesPattern = "suites/" + testProject + "/**.xml"
-        def suitesForProject = steps.findFiles glob: suitesPattern
+        if(StringUtils.isEmpty(basePath)){
+            basePath = steps.pwd()
+        }
 
-        steps.echo "Suites: " + suitesForProject
+        def suitesPattern = basePath + "/suites/" + testProject + "/**.xml"
+        def suitesForProject = steps.findFiles glob: suitesPattern
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
@@ -55,10 +57,6 @@ class TestNG implements Serializable {
         }).each {
             String suite = steps.readFile it.path
             suitesToMerge.add(suite)
-        }
-
-        if(StringUtils.isEmpty(basePath)){
-            basePath = steps.pwd()
         }
 
         String template = steps.readFile basePath + "/suites/_template.xml"
