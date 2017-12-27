@@ -1,8 +1,5 @@
 package org.fxclub.qa.jenkins
 
-import hudson.model.Slave
-import hudson.slaves.ComputerLauncher
-import hudson.slaves.DumbSlave
 import jenkins.model.Jenkins
 import hudson.slaves.SlaveComputer
 
