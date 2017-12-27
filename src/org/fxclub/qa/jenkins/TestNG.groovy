@@ -48,8 +48,8 @@ class TestNG implements Serializable {
 
         String basePath = steps.pwd()
 
-        String template = steps.readFile basePath + "suites/_template.xml"
-        String targetXml = basePath + "suites/testng-merged.xml"
+        String template = steps.readFile basePath + "/suites/_template.xml"
+        String targetXml = basePath + "/suites/testng-merged.xml"
 
         mergeXmlSuites(suitesToMerge, template, groupsExclude)
     }
