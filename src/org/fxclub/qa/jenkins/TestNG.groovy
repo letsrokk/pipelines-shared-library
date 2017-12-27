@@ -1,5 +1,6 @@
 package org.fxclub.qa.jenkins
 
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -11,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult
-import java.util.stream.Collectors;
 
 class TestNG implements Serializable {
 
@@ -31,19 +31,13 @@ class TestNG implements Serializable {
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
         def suitesPattern = "suites/" + testProject + "/**.xml"
-
-        steps.echo "Goovy Current Dir: " + new File("/home").listFiles()
-
-        List<?> wrappers = steps.findFiles glob: suitesPattern
-        List<File> suitesForProject = wrappers.stream().map({
-            wrapper -> new File(wrapper.getPath())
-        }).collect(Collectors.toList())
+        def suitesForProject = steps.findFiles glob: suitesPattern
 
         steps.echo "Suites: " + suitesForProject
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
-        List<File> suitesToMerge = suitesForProject.findAll({
+        def suitesToMerge = suitesForProject.findAll({
             def name = it.name.replace(".xml","")
             if(!suitesInclude.isEmpty()){
                 return suitesInclude.contains(name)
@@ -54,22 +48,22 @@ class TestNG implements Serializable {
 
         String basePath = steps.pwd()
 
-        File template = new File(basePath + "/suites/_template.xml")
-        File targetXml = new File(basePath + "/suites/testng-merged.xml")
+        def template = basePath + "suites/_template.xml"
+        def targetXml = basePath + "suites/testng-merged.xml"
 
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
 
-    private def mergeXmlSuites(List<File> suitesToMerge, File template, File targetXml, List<String> groupsExclude) {
+    private def mergeXmlSuites(List<?> suitesToMerge, def template, def targetXml, List<String> groupsExclude) {
         steps.echo "XML Suites for merge:" + suitesToMerge.toString()
 
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
-        Document merged_suite = documentBuilder.parse(template)
+        Document merged_suite = documentBuilder.parse(readFileToInputStream(template))
 
         List<Document> suites = new ArrayList<>()
-        suitesToMerge.stream().each {
-            suite -> suites.add(documentBuilder.parse(suite))
+        suitesToMerge.each {
+            suites.add(documentBuilder.parse(readFileToInputStream(it.getPath())))
         }
 
         Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
@@ -92,9 +86,21 @@ class TestNG implements Serializable {
         }
 
         Transformer transformer = TransformerFactory.newInstance().newTransformer()
-        Result output = new StreamResult(new FileOutputStream(targetXml))
+        ByteArrayOutputStream baos = new ByteArrayOutputStream()
+        Result output = new StreamResult(baos)
         Source input = new DOMSource(merged_suite)
         transformer.transform(input, output)
+
+        writeFile(targetXml, baos.toString())
+    }
+
+    def readFileToInputStream(def path){
+        String content = steps.readFile "${path}"
+        IOUtils.toInputStream(content)
+    }
+
+    def writeFile(def path, def content){
+        steps.writeFile file: path, text: content
     }
 
     private Node setGroups(Document suite, Node test, List<String> exclude) {
