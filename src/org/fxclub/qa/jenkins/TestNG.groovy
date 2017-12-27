@@ -1,17 +1,8 @@
 package org.fxclub.qa.jenkins
 
 import org.apache.commons.io.IOUtils
-import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Attr;
+import org.apache.commons.lang3.StringUtils
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult
 
 class TestNG implements Serializable {
 
@@ -48,15 +39,21 @@ class TestNG implements Serializable {
 
         String basePath = steps.pwd()
 
-        def template = basePath + "suites/_template.xml"
-        def targetXml = basePath + "suites/testng-merged.xml"
+        String template = basePath + "suites/_template.xml"
+        String targetXml = basePath + "suites/testng-merged.xml"
 
         mergeXmlSuites(suitesToMerge, template, targetXml, groupsExclude)
     }
 
-    private def mergeXmlSuites(def suitesToMerge, def template, def targetXml, List<String> groupsExclude) {
+    private def mergeXmlSuites(def suitesToMerge, String template, String targetXml, List<String> groupsExclude) {
         steps.echo "XML Suites for merge:" + suitesToMerge.toString()
 
+        XmlParser parser = new XmlParser()
+
+        Node merged_suite = parser.parseText(readFile(template))
+
+        steps.writeFile file: targetXml, text: merged_suite.toString()
+        /*
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
         Document merged_suite = documentBuilder.parse(readFileToInputStream(template))
@@ -92,6 +89,11 @@ class TestNG implements Serializable {
         transformer.transform(input, output)
 
         writeFile(targetXml, baos.toString())
+        */
+    }
+
+    String readFile(String path){
+        steps.readFile path
     }
 
     def readFileToInputStream(def path){
