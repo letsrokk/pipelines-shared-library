@@ -95,6 +95,8 @@ class TestNG implements Serializable {
         Result output = new StreamResult(baos)
         Source input = new DOMSource(merged_suite)
         transformer.transform(input, output)
+
+        baos.toString()
     }
 
 //    String readFile(String path){
