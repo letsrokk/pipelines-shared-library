@@ -49,7 +49,7 @@ class TestNG implements Serializable {
     private def mergeXmlSuites(def suitesToMerge, String template, String targetXml, List<String> groupsExclude) {
         steps.echo "XML Suites for merge:" + suitesToMerge.toString()
 
-        def parser = new XmlParser()
+        def parser = new XmlSlurper()
 
         Node merged_suite = parser.parseText(readFile(template))
 
