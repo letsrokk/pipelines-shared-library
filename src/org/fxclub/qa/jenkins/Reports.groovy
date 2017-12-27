@@ -1,5 +1,7 @@
 package org.fxclub.qa.jenkins
 
+import hudson.model.ParametersAction
+
 class Reports implements Serializable{
 
     def steps
@@ -63,6 +65,15 @@ class Reports implements Serializable{
         }
         steps.echo("Allure InfluxDB export map:" + customMap)
         return customMap
+    }
+
+    def converJobParamsToMap(){
+        def paramsMap = [:]
+        def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
+        for( p in myparams ) {
+            paramsMap[p.name.toString()] = p.value.toString()
+        }
+        paramsMap
     }
 
     def exportToInfluxDb(){
