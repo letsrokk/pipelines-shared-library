@@ -66,7 +66,7 @@ class TestNG implements Serializable {
         steps.writeFile file: targetXml, text: mergedSuite
     }
 
-    private def mergeXmlSuites(def suitesToMerge, String template, List<String> groupsExclude) {
+    private def mergeXmlSuites(List<String> suitesToMerge, String template, List<String> groupsExclude) {
         steps.echo "XML Suites for merge: " + suitesToMerge.toString()
         steps.echo "XML Template: " + template
 
@@ -76,7 +76,7 @@ class TestNG implements Serializable {
 
         List<Document> suites = new ArrayList<>()
         suitesToMerge.each {
-            suites.add(documentBuilder.parse(IOUtils.toInputStream(template)))
+            suites.add(documentBuilder.parse(IOUtils.toInputStream(it)))
         }
 
         Node suite_root = merged_suite.getElementsByTagName("suite").item(0)
