@@ -24,6 +24,10 @@ class TestNG implements Serializable {
     }
 
     def mergeSuites(String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
+        mergeSuites(null, testProject, suitesIncludeString, suitesExcludeString, groupsExcludeString)
+    }
+
+    def mergeSuites(String basePath, String testProject, String suitesIncludeString, String suitesExcludeString, String groupsExcludeString) {
         steps.echo "Project: ${testProject}"
 
         def suitesInclude = StringUtils.isEmpty(suitesIncludeString) ? Collections.emptyList() : Arrays.asList(suitesIncludeString.split(';'))
@@ -53,23 +57,19 @@ class TestNG implements Serializable {
             suitesToMerge.add(suite)
         }
 
-        String basePath = steps.pwd()
+        if(StringUtils.isEmpty(basePath)){
+            basePath = steps.pwd()
+        }
 
         String template = steps.readFile basePath + "/suites/_template.xml"
 
         String mergedSuite = mergeXmlSuites(suitesToMerge, template, groupsExclude)
-
-        steps.echo "Merged suite:"
-        steps.echo mergedSuite
 
         String targetXml = basePath + "/suites/testng-merged.xml"
         steps.writeFile file: targetXml, text: mergedSuite
     }
 
     private def mergeXmlSuites(List<String> suitesToMerge, String template, List<String> groupsExclude) {
-        steps.echo "XML Suites for merge: " + suitesToMerge.toString()
-        steps.echo "XML Template: " + template
-
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
         Document merged_suite = documentBuilder.parse(IOUtils.toInputStream(template))
