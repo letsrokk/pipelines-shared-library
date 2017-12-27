@@ -53,11 +53,13 @@ class TestNG implements Serializable {
 
         String template = steps.readFile basePath + "/suites/_template.xml"
 
-        String targetXml = mergeXmlSuites(suitesToMerge, template, groupsExclude)
+        String mergedSuite = mergeXmlSuites(suitesToMerge, template, groupsExclude)
 
         steps.echo "Merged suite:"
-        steps.echo targetXml
-//        String targetXml = basePath + "/suites/testng-merged.xml"
+        steps.echo mergedSuite
+
+        String targetXml = basePath + "/suites/testng-merged.xml"
+        steps.writeFile file: targetXml, text: mergedSuite
     }
 
     private def mergeXmlSuites(def suitesToMerge, String template, List<String> groupsExclude) {
