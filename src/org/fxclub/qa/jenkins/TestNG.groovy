@@ -40,7 +40,7 @@ class TestNG implements Serializable {
 
         def skipSuites = Arrays.asList("debug","debug1","debug2","checkin","weekends","reg_from_web")
 
-        List<String> suitesToMerge
+        List<String> suitesToMerge = new ArrayList<>()
         suitesForProject.findAll({
             def name = it.name.replace(".xml","")
             if(!suitesInclude.isEmpty()){
@@ -49,7 +49,7 @@ class TestNG implements Serializable {
                 return !suitesExclude.contains(name) && !skipSuites.contains(name)
             }
         }).each {
-            def suite = steps.readFile it.path
+            String suite = steps.readFile it.path
             suitesToMerge.add(suite)
         }
 
