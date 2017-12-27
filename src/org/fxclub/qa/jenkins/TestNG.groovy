@@ -1,9 +1,6 @@
 package org.fxclub.qa.jenkins
 
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
-import org.w3c.dom.Attr
-import org.w3c.dom.Document;
 
 class TestNG implements Serializable {
 
@@ -91,47 +88,47 @@ class TestNG implements Serializable {
         */
     }
 
-    String readFile(String path){
-        steps.readFile path
-    }
-
-    def readFileToInputStream(def path){
-        String content = steps.readFile "${path}"
-        IOUtils.toInputStream(content)
-    }
-
-    def writeFile(def path, def content){
-        steps.writeFile file: path, text: content
-    }
-
-    private Node setGroups(Document suite, Node test, List<String> exclude) {
-        if(!exclude.isEmpty()){
-            Node groups = null
-            NodeList testChilds = test.getChildNodes()
-            for(int i = 0; i < testChilds.getLength(); i++){
-                Node child = testChilds.item(i)
-                if(child.getNodeName() == "groups"){
-                    groups = testChilds.item(i)
-                    break
-                }
-            }
-            if(groups == null){
-                groups = (Node) suite.createElement("groups")
-            }
-            Node run = (Node) suite.createElement("run")
-            if(!exclude.isEmpty()){
-                for(String group_name : exclude){
-                    Node include_element = (Node) suite.createElement("exclude")
-                    Attr name_attribute = suite.createAttribute("name")
-                    name_attribute.setNodeValue(group_name)
-                    include_element.getAttributes().setNamedItem(name_attribute)
-                    run.appendChild(include_element)
-                }
-            }
-            groups.appendChild(run)
-            return groups
-        }
-        return null
-    }
+//    String readFile(String path){
+//        steps.readFile path
+//    }
+//
+//    def readFileToInputStream(def path){
+//        String content = steps.readFile "${path}"
+//        IOUtils.toInputStream(content)
+//    }
+//
+//    def writeFile(def path, def content){
+//        steps.writeFile file: path, text: content
+//    }
+//
+//    private Node setGroups(Document suite, Node test, List<String> exclude) {
+//        if(!exclude.isEmpty()){
+//            Node groups = null
+//            NodeList testChilds = test.getChildNodes()
+//            for(int i = 0; i < testChilds.getLength(); i++){
+//                Node child = testChilds.item(i)
+//                if(child.getNodeName() == "groups"){
+//                    groups = testChilds.item(i)
+//                    break
+//                }
+//            }
+//            if(groups == null){
+//                groups = (Node) suite.createElement("groups")
+//            }
+//            Node run = (Node) suite.createElement("run")
+//            if(!exclude.isEmpty()){
+//                for(String group_name : exclude){
+//                    Node include_element = (Node) suite.createElement("exclude")
+//                    Attr name_attribute = suite.createAttribute("name")
+//                    name_attribute.setNodeValue(group_name)
+//                    include_element.getAttributes().setNamedItem(name_attribute)
+//                    run.appendChild(include_element)
+//                }
+//            }
+//            groups.appendChild(run)
+//            return groups
+//        }
+//        return null
+//    }
 
 }
