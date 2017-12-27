@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.w3c.dom.Attr
 import org.w3c.dom.Document
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
@@ -49,9 +51,10 @@ class TestNG implements Serializable {
         String basePath = steps.pwd()
 
         String template = steps.readFile basePath + "/suites/_template.xml"
-        String targetXml = basePath + "/suites/testng-merged.xml"
 
         mergeXmlSuites(suitesToMerge, template, groupsExclude)
+
+        String targetXml = basePath + "/suites/testng-merged.xml"
     }
 
     private def mergeXmlSuites(def suitesToMerge, String template, List<String> groupsExclude) {
