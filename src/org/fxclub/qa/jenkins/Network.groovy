@@ -1,5 +1,8 @@
 package org.fxclub.qa.jenkins
 
+import hudson.model.Slave
+import hudson.slaves.ComputerLauncher
+import hudson.slaves.DumbSlave
 import jenkins.model.Jenkins
 import hudson.slaves.SlaveComputer
 
@@ -20,7 +23,9 @@ class Network implements Serializable {
         if (!(computer instanceof SlaveComputer)) {
             return InetAddress.getByName(hostname).address.collect { it & 0xFF }.join('.')
         } else {
-            return launcher.getHost();
+            def node = computer.getNode()
+            def launcher = node.getLauncher()
+            return launcher.getHost()
         }
     }
 
