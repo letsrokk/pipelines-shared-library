@@ -94,7 +94,7 @@ class Reports implements Serializable{
         steps.step([$class: 'InfluxDbPublisher',
               customData: customData,
               customDataMap: customMap,
-              customPrefix: null,
+              customPrefix: customPrefix,
               target: target])
     }
 
