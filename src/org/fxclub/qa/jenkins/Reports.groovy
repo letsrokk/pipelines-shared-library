@@ -80,15 +80,15 @@ class Reports implements Serializable{
     def exportToInfluxDb(){
         def allureMap = convertAllureInfluxDbExportToMap()
         def paramsMap = converJobParamsToMap()
-        def customMap = allureMap << paramsMap
-        exportToInfluxDb('test-executions', customMap)
+        //def customMap = allureMap << paramsMap
+        exportToInfluxDb('test-executions', paramsMap, allureMap)
     }
 
-    def exportToInfluxDb(target, customMap){
+    def exportToInfluxDb(target, paramsMap, customMap){
         steps.echo("InfluxDB: " + target)
         steps.echo("Map: " + customMap)
         steps.step([$class: 'InfluxDbPublisher',
-              customData: null,
+              customData: paramsMap,
               customDataMap: customMap,
               customPrefix: null,
               target: target])
