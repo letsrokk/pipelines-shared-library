@@ -74,7 +74,7 @@ class Reports implements Serializable{
             paramsMap[p.name.toString()] = p.value.toString()
         }
         steps.echo "Job Params: " + paramsMap
-        return paramsMap
+        return ["job_parameters":paramsMap]
     }
 
     def exportToInfluxDb(){
