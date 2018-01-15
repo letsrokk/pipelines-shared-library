@@ -7,9 +7,12 @@ import hudson.model.*
 
 class NodeInfo {
 
+    def steps
     def slave
-    NodeInfo(){
-        String nodeName = env.NODE_NAME
+
+    NodeInfo(steps){
+        this.steps = steps
+        String nodeName = steps.env.NODE_NAME
         slave = Jenkins.getInstance().getComputer(nodeName) as Slave
     }
 
