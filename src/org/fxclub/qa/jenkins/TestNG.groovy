@@ -38,7 +38,7 @@ class TestNG implements Serializable {
         steps.echo "Exclude groups: ${groupsExcludeString}"
 
         if(StringUtils.isEmpty(basePath)){
-            basePath = ""
+            basePath = "src/test/resources/"
         }
 
         def suitesPattern = basePath + "suites/" + testProject + "/**.xml"
