@@ -30,10 +30,10 @@ class NodeInfo implements Serializable {
 
     def printNodeInfo(){
         if (slave == null) {
-            println "{}"
+            steps.echo "{}"
         }
         else {
-            node = [
+            def node = [
                     "name" : slave.name,
                     "description" : slave.nodeDescription,
                     "remote_fs" : slave.remoteFS,
@@ -43,17 +43,18 @@ class NodeInfo implements Serializable {
                     "availability" : slave.retentionStrategy.class.name.tokenize('$').get(1),
             ]
 
+            def env = steps.env
             if ((env = slave.nodeProperties.get(EnvironmentVariablesNodeProperty.class)?.envVars)) {
                 node["env"] = env
             }
 
             if (slave.retentionStrategy instanceof RetentionStrategy.Demand) {
-                retention = slave.retentionStrategy as RetentionStrategy.Demand
+                def retention = slave.retentionStrategy as RetentionStrategy.Demand
                 node["in_demand_delay"] = retention.inDemandDelay
                 node["idle_delay"] = retention.idleDelay
             }
 
-            launcher = slave.launcher
+            def launcher = slave.launcher
             /*
             if (launcher instanceof CommandLauncher) {
                 node["launcher"] = "command"
@@ -78,7 +79,7 @@ class NodeInfo implements Serializable {
                 node["jvm_options"] = launcher.jvmOptions
             }
 
-            println toJSON(node)
+            steps.echo toJSON(node)
         }
     }
 
