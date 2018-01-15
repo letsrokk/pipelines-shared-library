@@ -5,7 +5,7 @@ import jenkins.model.*
 import hudson.slaves.*
 import hudson.model.*
 
-class NodeInfo {
+class NodeInfo implements Serializable {
 
     def steps
     def slave
@@ -13,7 +13,7 @@ class NodeInfo {
     NodeInfo(steps){
         this.steps = steps
         String nodeName = steps.env.NODE_NAME
-        slave = Jenkins.getInstance().getComputer(nodeName) as Slave
+        this.slave = Jenkins.getInstance().getComputer(nodeName) as Slave
     }
 
     def toJSON(node) {
