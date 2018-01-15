@@ -13,7 +13,7 @@ class NodeInfo implements Serializable {
     NodeInfo(steps){
         this.steps = steps
         String nodeName = steps.env.NODE_NAME
-        this.slave = Jenkins.getInstance().getComputer(nodeName) as Slave
+        this.slave = Jenkins.getInstance().getComputer(nodeName).getNode() as Slave
     }
 
     def toJSON(node) {
