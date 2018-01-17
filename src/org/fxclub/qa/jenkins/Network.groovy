@@ -4,6 +4,7 @@ import hudson.slaves.DumbSlave
 import hudson.slaves.JNLPLauncher
 import jenkins.model.Jenkins
 import hudson.slaves.SlaveComputer
+import hudson.plugins.sshslaves.SSHLauncher;
 
 class Network implements Serializable {
 
@@ -24,9 +25,9 @@ class Network implements Serializable {
         } else {
             def node = computer.getNode()
             def launcher = node.getLauncher()
-            if(launcher instanceof DumbSlave){
-                return launcher.getHost()
-            } else if(launcher instanceof JNLPLauncher) {
+            if (launcher instanceof SSHLauncher){
+                return ((SSHLauncher) launcher).getHost()
+            } else if(launcher instanceof JNLPLauncher || launcher instanceof DumbSlave) {
                 return InetAddress.getByName(hostname).address.collect { it & 0xFF }.join('.')
             } else {
                 throw new UnsupportedOperationException('Unsupported Slave type: ' + launcher.getClass().getCanonicalName())
