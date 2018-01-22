@@ -40,6 +40,7 @@ class Reports implements Serializable{
         steps.sh "rm -rf allure-report/"
         steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
+        steps.zip archive: true, dir: "${resultsPath}", glob: '', zipFile: "allure-results.zip"
     }
 
     def convertAllureInfluxDbExportToMap(){
