@@ -40,6 +40,14 @@ class Reports implements Serializable{
         steps.sh "rm -rf allure-report/"
         steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
+        archiveAllureResults(resultsPath)
+    }
+
+    def archiveAllureResults(resultsPath){
+        def exists = steps.fileExists 'allure-results.zip'
+        if(exists){
+            steps.fileOperations([steps.fileDeleteOperation(excludes: '', includes: 'allure-results.zip')])
+        }
         steps.zip archive: true, dir: "${resultsPath}", glob: '', zipFile: "allure-results.zip"
     }
 
