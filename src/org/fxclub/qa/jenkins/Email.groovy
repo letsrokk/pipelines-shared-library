@@ -6,7 +6,10 @@ class Email implements Serializable {
         this.steps = steps
     }
 
-    def sendAllureResults(subject,mailRecipients) {
+    def sendAllureResults(subject, mailRecipients) {
+        sendAllureResults(subject, mailRecipients , "")
+    }
+    def sendAllureResults(subject, mailRecipients, notes) {
         steps.emailext body: '''${SCRIPT, template="allure-report.groovy"}''',
                 subject: "[Jenkins] ${subject}",
                 to: "${mailRecipients}"
