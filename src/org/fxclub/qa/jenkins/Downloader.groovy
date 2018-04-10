@@ -10,12 +10,20 @@ class Downloader {
         this.steps = steps
     }
 
-    List<String> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
+    List<String> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user='', def passwd=''){
         steps.fileOperations([
-                steps.fileDownloadOperation(password: '', targetFileName: 'zipBuilds.zip', targetLocation: '', url: "${buildUrl}artifact/*zip*/archive.zip", userName: ''),
+                steps.fileDownloadOperation(targetFileName: 'zipBuilds.zip', targetLocation: '', url: "${buildUrl}artifact/*zip*/archive.zip", userName: user, password: passwd),
                 steps.fileUnZipOperation(filePath: 'zipBuilds.zip', targetLocation: 'unzipBuilds')
         ])
 
-        steps.findFiles glob: ''
+        def files = []
+        if(extensions.size > 0) {
+            extensions.each{
+                files.addAll(steps.findFiles(glob: "unzipBuilds/**/*{it}"))
+            }
+        } else {
+            files.addAll(steps.findFiles(glob: "unzipBuilds/**/*"))
+        }
+
     }
 }
