@@ -16,7 +16,7 @@ class Downloader {
         File localZipFile = new File(localZipPath)
         steps.echo "Downloaded artifacts: " + localZipFile.getAbsolutePath()
 
-        localZipFile.mkdirs()
+        localZipFile.getParentFile().mkdirs()
         localZipFile.createNewFile()
 
         localZipFile.withOutputStream { out ->
