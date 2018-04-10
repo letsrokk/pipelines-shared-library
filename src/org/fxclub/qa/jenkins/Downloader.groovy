@@ -15,6 +15,9 @@ class Downloader {
         def localZipPath = "${workspace}/zipBuilds.zip"
         File localZipFile = new File(localZipPath)
         steps.echo "Downloaded artifacts: " + localZipFile.getAbsolutePath()
+
+        localZipFile.createNewFile()
+
         localZipFile.withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
             if((user?.trim())) {
