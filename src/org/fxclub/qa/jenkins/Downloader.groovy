@@ -6,7 +6,10 @@ class Downloader {
 
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def localZipPath = "zipBuilds.zip"
-        new File(localZipPath).withOutputStream { out ->
+        File localZipFile = new File(localZipPath)
+        localZipFile.createNewFile()
+
+        localZipFile.withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
             if((user?.trim())) {
                 def remoteAuth = "Basic " + "${user}:${passwd}".bytes.encodeBase64()
