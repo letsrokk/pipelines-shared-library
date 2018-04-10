@@ -12,13 +12,8 @@ class Downloader {
 
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def workspace = steps.pwd()
-        def localZipPath = "${workspace}/zipBuilds.zip"
-        File localZipFile = new File(localZipPath)
-        steps.echo "Downloaded artifacts: " + localZipFile.getAbsolutePath()
 
-        localZipFile.getParentFile().mkdirs()
-
-        localZipFile.withOutputStream { out ->
+        new File("${workspace}/zipBuilds.zip").withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
             if((user?.trim())) {
                 def remoteAuth = "Basic " + "${user}:${passwd}".bytes.encodeBase64()
