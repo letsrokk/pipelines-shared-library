@@ -16,6 +16,6 @@ class Downloader {
                 steps.fileUnZipOperation(filePath: 'zipBuilds.zip', targetLocation: 'unzipBuilds')
         ])
 
-        steps.findFiles glob: 'unzipBuilds/*.zip'
+        steps.findFiles glob: '**/unzipBuilds/**.zip'
     }
 }
