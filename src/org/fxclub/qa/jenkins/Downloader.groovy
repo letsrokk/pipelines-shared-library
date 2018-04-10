@@ -5,7 +5,7 @@ import groovy.io.FileType
 class Downloader {
 
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
-        def localZipPath = "target/zipBuilds.zip"
+        def localZipPath = "zipBuilds.zip"
         new File(localZipPath).withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
             if((user?.trim())) {
@@ -15,7 +15,7 @@ class Downloader {
             out << url.inputStream
         }
 
-        def unzipFolder = "target/unzipBuilds"
+        def unzipFolder = "unzipBuilds"
         def ant = new AntBuilder()
         ant.unzip(
                 src: localZipPath,
