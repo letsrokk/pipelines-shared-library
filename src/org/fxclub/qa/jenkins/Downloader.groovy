@@ -13,14 +13,18 @@ class Downloader {
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def workspace = steps.pwd()
 
-        new File("${workspace}/zipBuilds.zip").withOutputStream { out ->
-            def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
-            if((user?.trim())) {
-                def remoteAuth = "Basic " + "${user}:${passwd}".bytes.encodeBase64()
-                url.setRequestProperty("Authorization", remoteAuth)
-            }
-            out << url.inputStream
-        }
+//        new File("${workspace}/zipBuilds.zip").withOutputStream { out ->
+//            def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
+//            if((user?.trim())) {
+//                def remoteAuth = "Basic " + "${user}:${passwd}".bytes.encodeBase64()
+//                url.setRequestProperty("Authorization", remoteAuth)
+//            }
+//            out << url.inputStream
+//        }
+
+        def output_file = new File("${workspace}/zipBuilds.zip").newOutputStream()
+        output_file << new URL("${buildUrl}artifact/*zip*/archive.zip").openStream()
+        output_file.close()
 
         def unzipFolder = "${workspace}/unzipBuilds"
         def ant = new AntBuilder()
