@@ -7,6 +7,8 @@ class Downloader {
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def localZipPath = "zipBuilds.zip"
         File localZipFile = new File(localZipPath)
+        println(localZipFile.getAbsolutePath())
+
         localZipFile.createNewFile()
 
         localZipFile.withOutputStream { out ->
