@@ -16,15 +16,14 @@ class Downloader {
                 steps.fileUnZipOperation(filePath: 'zipBuilds.zip', targetLocation: 'unzipBuilds')
         ])
 
-        return steps.findFiles(glob: "unzipBuilds/**/*{extensions[0]}")
-//        def files = []
-//        if(extensions.size > 0) {
-//            extensions.each{
-//                files.addAll(steps.findFiles(glob: "unzipBuilds/**/*{it}"))
-//            }
-//        } else {
-//            files.addAll(steps.findFiles(glob: "unzipBuilds/**/*"))
-//        }
+        def files = []
+        if(extensions.size > 0) {
+            extensions.each{
+                files.addAll(steps.findFiles(glob: "unzipBuilds/**/*${it}"))
+            }
+        } else {
+            files.addAll(steps.findFiles(glob: "unzipBuilds/**/*"))
+        }
 
         return files
     }
