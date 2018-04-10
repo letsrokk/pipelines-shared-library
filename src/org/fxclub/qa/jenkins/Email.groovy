@@ -1,7 +1,9 @@
 package org.fxclub.qa.jenkins
 
 class Email implements Serializable {
+
     def steps
+
     Email(steps){
         this.steps = steps
     }
