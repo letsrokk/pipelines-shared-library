@@ -17,7 +17,6 @@ class Downloader {
         steps.echo "Downloaded artifacts: " + localZipFile.getAbsolutePath()
 
         localZipFile.getParentFile().mkdirs()
-        localZipFile.createNewFile()
 
         localZipFile.withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
