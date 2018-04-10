@@ -4,10 +4,16 @@ import groovy.io.FileType
 
 class Downloader {
 
+    def steps
+
+    Downloader(steps){
+        this.steps = steps
+    }
+
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def localZipPath = "zipBuilds.zip"
         File localZipFile = new File(localZipPath)
-        println(localZipFile.getAbsolutePath())
+        steps.echo "" + localZipFile.getAbsolutePath()
 
         localZipFile.createNewFile()
 
