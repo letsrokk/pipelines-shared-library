@@ -22,9 +22,12 @@ class Downloader {
 //            out << url.inputStream
 //        }
 
-        def output_file = new File("${workspace}/zipBuilds.zip").newOutputStream()
-        output_file << new URL("${buildUrl}artifact/*zip*/archive.zip").openStream()
-        output_file.close()
+        File output_file = new File("${workspace}/zipBuilds.zip")
+        output_file.createNewFile()
+
+        def output_stream = output_file.newOutputStream()
+        output_stream << new URL("${buildUrl}artifact/*zip*/archive.zip").openStream()
+        output_stream.close()
 
         def unzipFolder = "${workspace}/unzipBuilds"
         def ant = new AntBuilder()
