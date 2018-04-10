@@ -12,12 +12,9 @@ class Downloader {
 
     List<File> downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user=null, def passwd=null){
         def workspace = steps.pwd()
-        def localZipPath = "${workspace}zipBuilds.zip"
+        def localZipPath = "${workspace}/zipBuilds.zip"
         File localZipFile = new File(localZipPath)
-        steps.echo "" + localZipFile.getAbsolutePath()
-
-        localZipFile.createNewFile()
-
+        steps.echo "Downloaded artifacts: " + localZipFile.getAbsolutePath()
         localZipFile.withOutputStream { out ->
             def url = new URL("${buildUrl}artifact/*zip*/archive.zip").openConnection()
             if((user?.trim())) {
@@ -27,7 +24,7 @@ class Downloader {
             out << url.inputStream
         }
 
-        def unzipFolder = "${workspace}unzipBuilds"
+        def unzipFolder = "${workspace}/unzipBuilds"
         def ant = new AntBuilder()
         ant.unzip(
                 src: localZipPath,
