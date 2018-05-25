@@ -8,7 +8,7 @@ class Parameters implements Serializable {
         this.steps = steps
     }
 
-    String get(parameterName, defaultValue){
+    String getParam(parameterName, defaultValue){
         try{
             return params.parameterName
         } catch(ignore){
