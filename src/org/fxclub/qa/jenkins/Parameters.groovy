@@ -8,9 +8,9 @@ class Parameters implements Serializable {
         this.steps = steps
     }
 
-    String getParam(parameterName, defaultValue){
+    String getParam(param, defaultValue){
         try{
-            return steps.properties[parameterName]
+            return "${parameterName}"
         } catch(ignore){
             steps.echo ignore.getMessage()
             return defaultValue
