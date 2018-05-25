@@ -8,7 +8,7 @@ class Parameters implements Serializable {
         this.steps = steps
     }
 
-    String getParam(parameterName, defaultValue){
+    String get(parameterName, defaultValue){
         def value = steps.params[parameterName]
 
         if(value == null)
