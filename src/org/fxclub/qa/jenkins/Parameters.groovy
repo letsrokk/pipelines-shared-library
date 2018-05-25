@@ -10,8 +10,9 @@ class Parameters implements Serializable {
 
     String getParam(parameterName, defaultValue){
         try{
-            return params.parameterName
+            return steps.params.parameterName
         } catch(ignore){
+            steps.echo ignore.getMessage()
             return defaultValue
         }
     }
