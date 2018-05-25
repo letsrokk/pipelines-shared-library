@@ -4,7 +4,7 @@ class Parameters implements Serializable {
 
     static String getParam(param, defaultValue){
         try{
-            return "${param}"
+            return groovy.lang.Binding.getVariable("${param}")
         } catch(ignore){
             return defaultValue
         }
