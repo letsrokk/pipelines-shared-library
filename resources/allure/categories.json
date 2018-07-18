@@ -1,0 +1,18 @@
+[
+  {
+    "name": "NullPointerExceptions",
+    "messageRegex": ".*NullPointerException.*"
+  },
+  {
+    "name": "WebDriver Exceptions",
+    "traceRegex": ".*WebDriverException: unknown error.*"
+  },
+  {
+    "name": "WebDriver Exceptions",
+    "traceRegex": ".*IllegalStateException:.*webdriver.*"
+  },
+  {
+    "name": "Selenoid Exceptions",
+    "messageRegex": ".*New session attempts retry count exceeded.*"
+  }
+]
