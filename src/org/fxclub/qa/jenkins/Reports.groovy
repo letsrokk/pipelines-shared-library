@@ -41,7 +41,7 @@ class Reports implements Serializable{
 
         steps.echo "Adding Allure Categories"
         try{
-            def categories = steps.libraryResource 'allure/categories.json'
+            def categories = new File(getClass().getResource('/allure/categories.json').toURI()).getText('UTF-8')
             steps.writeFile encoding: 'UTF-8', file: "${resultsPath}/categories.json", text: categories
         }catch (Exception e){
             steps.echo "${e}"
