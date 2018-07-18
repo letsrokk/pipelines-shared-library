@@ -40,12 +40,9 @@ class Reports implements Serializable{
         steps.sh "rm -rf allure-report/"
 
         steps.echo "Adding Allure Categories"
-        try{
-            def categories = steps.libraryResource 'allure/categories.json'
-            steps.writeFile encoding: 'UTF-8', file: "target/allure-results/categories.json", text: categories
-        }catch (Exception e){
-            steps.echo "${e}"
-        }
+        def categories = steps.libraryResource 'allure/categories.json'
+        steps.writeFile encoding: 'UTF-8', file: "${resultsPath}/categories.json", text: categories
+
         steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
         archiveAllureResults(resultsPath)
