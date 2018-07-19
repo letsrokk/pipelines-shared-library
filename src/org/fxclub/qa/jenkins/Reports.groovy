@@ -42,8 +42,8 @@ class Reports implements Serializable{
         steps.echo "Adding Allure Categories"
         addAllureCategories(resultsPath)
 
-        steps.echo "Adding Allure Environment"
-        addAllureEnvironment(resultsPath)
+//        steps.echo "Adding Allure Environment"
+//        addAllureEnvironment(resultsPath)
 
         steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
