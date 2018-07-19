@@ -70,8 +70,8 @@ class Reports implements Serializable{
                 propsBuilder.append(System.lineSeparator())
             }
             steps.writeFile encoding: 'UTF-8', file: filePath, text: propsBuilder.toString()
-        }catch (Exception e){
-            steps.echo e.getMessage()
+        }catch (err){
+            steps.echo err.getMessage()
         }
     }
 
