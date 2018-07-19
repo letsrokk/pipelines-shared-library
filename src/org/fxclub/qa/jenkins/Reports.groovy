@@ -60,15 +60,19 @@ class Reports implements Serializable{
     }
 
     def writeJobParamsToPropertiesFile(filePath){
-        def propsBuilder = StringBuilder.newInstance()
-        def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
-        for( p in myparams ) {
-            propsBuilder.append(p.name.toString())
-            propsBuilder.append("=")
-            propsBuilder.append(p.value.toString())
-            propsBuilder.append(System.lineSeparator())
+        try{
+            def propsBuilder = StringBuilder.newInstance()
+            def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
+            for( p in myparams ) {
+                propsBuilder.append(p.name.toString())
+                propsBuilder.append("=")
+                propsBuilder.append(p.value.toString())
+                propsBuilder.append(System.lineSeparator())
+            }
+            steps.writeFile encoding: 'UTF-8', file: filePath, text: propsBuilder.toString()
+        }catch (Exception e){
+            steps.echo e.getMessage()
         }
-        steps.writeFile encoding: 'UTF-8', file: filePath, text: propsBuilder.toString()
     }
 
     def archiveAllureResults(resultsPath){
