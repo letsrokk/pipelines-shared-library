@@ -65,7 +65,7 @@ class Reports implements Serializable{
         for( p in jobParams ) {
             props.setProperty(p.name.toString(), p.value.toString())
         }
-        steps.writeFile encoding: 'UTF-8', file: filePath, text: props
+        steps.writeFile encoding: 'UTF-8', file: filePath, text: props.toString()
     }
 
     def archiveAllureResults(resultsPath){
