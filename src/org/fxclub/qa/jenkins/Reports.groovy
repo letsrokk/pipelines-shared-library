@@ -61,12 +61,13 @@ class Reports implements Serializable{
 
     def writeJobParamsToPropertiesFile(filePath){
         try{
+            Set<Map.Entry> myparams = converJobParamsToMap().get("job_parameters").entrySet()
+
             def propsBuilder = StringBuilder.newInstance()
-            def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
             for( p in myparams ) {
-                propsBuilder.append(p.name.toString())
+                propsBuilder.append(p.key)
                 propsBuilder.append("=")
-                propsBuilder.append(p.value.toString())
+                propsBuilder.append(p.value)
                 propsBuilder.append(System.lineSeparator())
             }
             steps.writeFile encoding: 'UTF-8', file: filePath, text: propsBuilder.toString()
