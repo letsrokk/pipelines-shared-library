@@ -62,8 +62,8 @@ class Reports implements Serializable{
     def writeJobParamsToPropertiesFile(filePath){
         try{
             def propsBuilder = StringBuilder.newInstance()
-            def jobParams = steps.currentBuild.rawBuild.getAction(ParametersAction)
-            for( p in jobParams ) {
+            def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
+            for( p in myparams ) {
                 propsBuilder.append(p.name.toString())
                 propsBuilder.append("=")
                 propsBuilder.append(p.value.toString())
