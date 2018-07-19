@@ -60,12 +60,16 @@ class Reports implements Serializable{
     }
 
     def writeJobParamsToPropertiesFile(filePath){
-        Properties props = new Properties()
-        def jobParams = getJobParams()
-        for( p in jobParams ) {
-            props.setProperty(p.name.toString(), p.value.toString())
+        try{
+            Properties props = new Properties()
+            def jobParams = getJobParams()
+            for( p in jobParams ) {
+                props.setProperty(p.name.toString(), p.value.toString())
+            }
+            steps.writeFile encoding: 'UTF-8', file: filePath, text: props.toString()
+        }catch (Exception e){
+            steps.echo e.getMessage()
         }
-        steps.writeFile encoding: 'UTF-8', file: filePath, text: props.toString()
     }
 
     def archiveAllureResults(resultsPath){
