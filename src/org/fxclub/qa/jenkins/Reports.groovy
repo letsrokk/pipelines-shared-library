@@ -40,12 +40,32 @@ class Reports implements Serializable{
         steps.sh "rm -rf allure-report/"
 
         steps.echo "Adding Allure Categories"
-        def categories = steps.libraryResource 'allure/categories.json'
-        steps.writeFile encoding: 'UTF-8', file: "${resultsPath}/categories.json", text: categories
+        addAllureCategories(resultsPath)
+
+        steps.echo "Adding Allure Environment"
+        addAllureEnvironment(resultsPath)
 
         steps.echo "Publishing Allure Reports"
         steps.allure commandline: "${allureCommandlineToolName}", jdk: '', results: [[path: "${resultsPath}"]]
         archiveAllureResults(resultsPath)
+    }
+
+    def addAllureCategories(resultsPath){
+        def categories = steps.libraryResource 'allure/categories.json'
+        steps.writeFile encoding: 'UTF-8', file: "${resultsPath}/categories.json", text: categories
+    }
+
+    def addAllureEnvironment(resultsPath){
+        writeJobParamsToPropertiesFile("${resultsPath}/environment.properties")
+    }
+
+    def writeJobParamsToPropertiesFile(filePath){
+        Properties props = new Properties()
+        def jobParams = getJobParams()
+        for( p in jobParams ) {
+            props.setProperty(p.name.toString(), p.value.toString())
+        }
+        steps.writeFile encoding: 'UTF-8', file: filePath, text: props
     }
 
     def archiveAllureResults(resultsPath){
@@ -81,9 +101,13 @@ class Reports implements Serializable{
         return customMap
     }
 
+    def getJobParams(){
+        return steps.currentBuild.rawBuild.getAction(ParametersAction)
+    }
+
     def converJobParamsToMap(){
         def paramsMap = [:]
-        def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
+        def myparams = getJobParams()
         for( p in myparams ) {
             paramsMap[p.name.toString()] = p.value.toString()
         }
