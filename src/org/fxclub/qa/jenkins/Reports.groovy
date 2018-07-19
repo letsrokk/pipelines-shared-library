@@ -62,7 +62,7 @@ class Reports implements Serializable{
     def writeJobParamsToPropertiesFile(filePath){
         try{
             def propsBuilder = StringBuilder.newInstance()
-            def jobParams = getJobParams()
+            def jobParams = steps.currentBuild.rawBuild.getAction(ParametersAction)
             for( p in jobParams ) {
                 propsBuilder.append(p.name.toString())
                 propsBuilder.append("=")
@@ -108,13 +108,9 @@ class Reports implements Serializable{
         return customMap
     }
 
-    def getJobParams(){
-        return steps.currentBuild.rawBuild.getAction(ParametersAction)
-    }
-
     def converJobParamsToMap(){
         def paramsMap = [:]
-        def myparams = getJobParams()
+        def myparams = steps.currentBuild.rawBuild.getAction(ParametersAction)
         for( p in myparams ) {
             paramsMap[p.name.toString()] = p.value.toString()
         }
