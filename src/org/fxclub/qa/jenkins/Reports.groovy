@@ -61,12 +61,15 @@ class Reports implements Serializable{
 
     def writeJobParamsToPropertiesFile(filePath){
         try{
-            Properties props = new Properties()
+            def propsBuilder = StringBuilder.newInstance()
             def jobParams = getJobParams()
             for( p in jobParams ) {
-                props.setProperty(p.name.toString(), p.value.toString())
+                propsBuilder.append(p.name.toString())
+                propsBuilder.append("=")
+                propsBuilder.append(p.value.toString())
+                propsBuilder.append(System.lineSeparator())
             }
-            steps.writeFile encoding: 'UTF-8', file: filePath, text: props.toString()
+            steps.writeFile encoding: 'UTF-8', file: filePath, text: propsBuilder.toString()
         }catch (Exception e){
             steps.echo e.getMessage()
         }
