@@ -12,6 +12,10 @@
     "traceRegex": ".*IllegalStateException:.*webdriver.*"
   },
   {
+    "name": "WebDriver Exceptions",
+    "traceRegex": ".*WebDriverException: Session timed out or not found*"
+  },
+  {
     "name": "Selenoid Exceptions",
     "messageRegex": ".*New session attempts retry count exceeded.*"
   }
