@@ -4,6 +4,18 @@
     "messageRegex": ".*NullPointerException.*"
   },
   {
+    "name": "Invalid locators / Expected conditions",
+    "traceRegex": ".*ElementNotVisibleException.*"
+  },
+  {
+    "name": "Invalid locators / Expected conditions",
+    "traceRegex": ".*NoSuchElementException.*"
+  },
+  {
+    "name": "Invalid locators / Expected conditions",
+    "traceRegex": ".*TimeoutException: Expected condition failed.*"
+  },
+  {
     "name": "WebDriver Exceptions",
     "traceRegex": ".*WebDriverException: unknown error.*"
   },
