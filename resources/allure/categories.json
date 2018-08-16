@@ -33,6 +33,6 @@
   },
   {
     "name": "Absent presentations for method",
-    "traceRegex": ".*NoCaseForSuchMethodException: Not payment presentations for method:*"
+    "traceRegex": ".*NoCaseForSuchMethodException.*"
   }
 ]
