@@ -30,5 +30,9 @@
   {
     "name": "Selenoid Exceptions",
     "messageRegex": ".*New session attempts retry count exceeded.*"
+  },
+  {
+    "name": "Absent presentations for method",
+    "traceRegex": ".*NoCaseForSuchMethodException: Not payment presentations for method:*"
   }
 ]
