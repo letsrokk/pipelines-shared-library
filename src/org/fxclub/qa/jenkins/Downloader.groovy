@@ -11,6 +11,11 @@ class Downloader {
     }
 
     def downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user='', def passwd=''){
+        steps.fileOperations([
+                steps.fileDeleteOperation(excludes: '', includes: 'artifacts.zip'),
+                steps.folderDeleteOperation('unzipBuilds')
+        ])
+
         steps.sh(
                 "wget "
                 + (user?.trim() ? "--http-user=${user} --http-password=${passwd} " : "")
