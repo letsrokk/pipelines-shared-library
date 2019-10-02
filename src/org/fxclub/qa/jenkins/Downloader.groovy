@@ -11,6 +11,11 @@ class Downloader {
     }
     
     def downloadFile(String buildUrl, def extensions=[]){
+        
+        steps.fileOperations([
+                steps.folderDeleteOperation('builds')
+        ])
+        
         steps.sh("wget -P builds ${buildUrl}")
 
         def files = []
