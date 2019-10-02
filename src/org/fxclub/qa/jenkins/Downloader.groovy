@@ -9,6 +9,21 @@ class Downloader {
     Downloader(steps){
         this.steps = steps
     }
+    
+    def downloadFile(String buildUrl, def extensions=[]){
+        steps.sh("wget -P builds ${buildUrl}")
+
+        def files = []
+        if (extensions.size > 0) {
+            extensions.each{
+                files.addAll(steps.findFiles(glob: "builds/**/*${it}"))
+            }
+        } else {
+            files.addAll(steps.findFiles(glob: "builds/**/*"))
+        }
+
+        return files
+    }
 
     def downloadJenkinsArtifacts(String buildUrl, def extensions=[], def user='', def passwd=''){
         steps.fileOperations([
@@ -27,7 +42,7 @@ class Downloader {
         ])
 
         def files = []
-        if(extensions.size > 0) {
+        if (extensions.size > 0) {
             extensions.each{
                 files.addAll(steps.findFiles(glob: "unzipBuilds/**/*${it}"))
             }
